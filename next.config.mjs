@@ -4,12 +4,18 @@ const nextConfig = {
   reactCompiler: true,
   images: {
     remotePatterns: [
+      // allow images from any host over HTTPS and HTTP
       {
         protocol: 'https',
-        hostname: '*',
+        hostname: '**',
         port: '',
-        pathname: '*/**',
-        search: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: '**',
+        port: '',
+        pathname: '/**',
       },
     ],
   },

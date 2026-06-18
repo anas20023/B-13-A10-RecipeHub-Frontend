@@ -11,6 +11,7 @@ export default function RegisterForm({ callbackUrl }) {
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
+    const [image, setImage] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
@@ -26,6 +27,8 @@ export default function RegisterForm({ callbackUrl }) {
             name,
             email,
             password,
+            image,
+            callbackURL: "/login",
         })
 
         setLoading(false)
@@ -33,7 +36,7 @@ export default function RegisterForm({ callbackUrl }) {
         if (signUpError) {
             setError(
                 signUpError.message ||
-                    'Registration failed. Please try again.'
+                'Registration failed. Please try again.'
             )
             return
         }
@@ -87,6 +90,20 @@ export default function RegisterForm({ callbackUrl }) {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="you@example.com"
+                        className="rounded border-2"
+                    />
+                </div>
+                <div className="flex flex-col gap-1">
+                    <Label htmlFor="register-email">
+                        Photo URL(optional)
+                    </Label>
+                    <Input
+                        id="photo_url"
+                        type="text"
+                        required
+                        value={image}
+                        onChange={(e) => setImage(e.target.value)}
+                        placeholder="https://imagebb.co/..."
                         className="rounded border-2"
                     />
                 </div>
@@ -163,13 +180,12 @@ export default function RegisterForm({ callbackUrl }) {
             <p className="mt-6 text-center text-sm text-zinc-600 dark:text-zinc-400">
                 Already have an account?{' '}
                 <Link
-                    href={`/login${
-                        callbackUrl
+                    href={`/login${callbackUrl
                             ? `?callbackUrl=${encodeURIComponent(
-                                  callbackUrl
-                              )}`
+                                callbackUrl
+                            )}`
                             : ''
-                    }`}
+                        }`}
                     className="font-semibold text-orange-600 dark:text-orange-400 hover:underline"
                 >
                     Sign In

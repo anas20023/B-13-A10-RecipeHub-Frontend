@@ -96,7 +96,7 @@ export default function Navbar() {
                     {mounted && (
                         <button
                             onClick={toggleTheme}
-                            className="p-2.5 rounded-xl border border-stone-200 dark:border-zinc-800/80 bg-white/50 dark:bg-zinc-900/50 hover:bg-orange-50 dark:hover:bg-zinc-800 text-stone-700 dark:text-zinc-300 transition-all duration-300 hover:rotate-12 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+                            className="p-2.5 rounded-full hover:border bg-white/50 dark:bg-zinc-900/50 hover:bg-orange-50 dark:hover:bg-zinc-800 text-stone-700 dark:text-zinc-300 transition-all duration-300 hover:rotate-24 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
                             aria-label="Toggle theme"
                         >
                             {theme === 'dark' ? (
@@ -117,11 +117,9 @@ export default function Navbar() {
                                     aria-haspopup="menu"
                                     aria-expanded={isAvatarOpen}
                                 >
-                                    <Avatar className="ring-2 ring-orange-500/20 dark:ring-orange-500/40">
-                                        <Avatar.Image loading="eager" alt={user.name} src={user.image} />
-                                        <Avatar.Fallback className="bg-orange-100 dark:bg-zinc-800 text-orange-600 dark:text-orange-400 font-bold">
-                                            {user.name.toLocaleUpperCase().slice(0, 2)}
-                                        </Avatar.Fallback>
+                                    <Avatar>
+                                        <Avatar.Image alt="John Doe" src={user?.image} />
+                                        <Avatar.Fallback>JD</Avatar.Fallback>
                                     </Avatar>
                                 </button>
 
@@ -173,7 +171,7 @@ export default function Navbar() {
                     {mounted && (
                         <button
                             onClick={toggleTheme}
-                            className="p-2 rounded-xl border border-stone-200 dark:border-zinc-800/80 bg-white/50 dark:bg-zinc-900/50 hover:bg-orange-50 dark:hover:bg-zinc-800 text-stone-700 dark:text-zinc-300 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+                            className="p-2 rounded bg-white/50 dark:bg-zinc-900/50 hover:bg-orange-50 dark:hover:bg-zinc-800 text-stone-700 dark:text-zinc-300 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
                             aria-label="Toggle theme"
                         >
                             {theme === 'dark' ? (
@@ -199,9 +197,8 @@ export default function Navbar() {
 
             {/* Mobile menu */}
             <div
-                className={`overflow-hidden border-t border-orange-100/50 dark:border-zinc-850/80 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md transition-all duration-300 ease-in-out md:hidden ${
-                    isOpen ? 'max-h-128 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
-                }`}
+                className={`overflow-hidden border-t border-orange-100/50 dark:border-zinc-850/80 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md transition-all duration-300 ease-in-out md:hidden ${isOpen ? 'max-h-128 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
+                    }`}
             >
                 <div className="px-6 pb-6 pt-4 max-w-7xl mx-auto">
                     <ul className="flex flex-col gap-1.5">
