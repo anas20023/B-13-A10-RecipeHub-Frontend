@@ -8,13 +8,21 @@ import Image from 'next/image'
 import { FaBars } from 'react-icons/fa'
 import { FaX } from 'react-icons/fa6'
 import { Sun, Moon } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import NavLink from './NavLink'
 import { authClient } from '@/app/lib/auth-client'
 import { useTheme } from '@/context/ThemeContext'
 
 export default function Navbar() {
     const router = useRouter()
+    const pathname = usePathname()
+
+    // Build login/register hrefs with callbackUrl so the user is returned
+    // to the current page after authentication.
+    const isAuthPage = pathname === '/login' || pathname === '/register'
+    const callbackParam = isAuthPage ? '' : `?callbackUrl=${encodeURIComponent(pathname)}`
+    const loginHref = `/login${callbackParam}`
+    const registerHref = `/register${callbackParam}`
     const { data: session } = authClient.useSession()
     const user = session?.user
     const desktopDropdownRef = useRef(null)
@@ -137,7 +145,7 @@ export default function Navbar() {
                             </>
                         ) : (
                             <div className="flex items-center gap-3">
-                                <Link href="/login">
+                                <Link href={loginHref}>
                                     <Button
                                         variant="outline"
                                         radius="xl"
@@ -146,7 +154,7 @@ export default function Navbar() {
                                         Login
                                     </Button>
                                 </Link>
-                                <Link href="/register" >
+                                <Link href={registerHref}>
                                     <Button
                                         variant="solid"
                                         radius="xl"
@@ -246,7 +254,7 @@ export default function Navbar() {
                             </div>
                         ) : (
                             <div className="flex flex-col gap-2.5">
-                                <Link href="/login">
+                                <Link href={loginHref}>
                                     <Button
                                         onClick={() => setIsOpen(false)}
                                         variant="outline"
@@ -256,7 +264,7 @@ export default function Navbar() {
                                         Login
                                     </Button>
                                 </Link>
-                                <Link href="/register">
+                                <Link href={registerHref}>
                                     <Button
                                         onClick={() => setIsOpen(false)}
                                         variant="primary"
