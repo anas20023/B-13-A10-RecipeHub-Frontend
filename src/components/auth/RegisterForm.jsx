@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { Button, Input, Label } from '@heroui/react'
 import { authClient } from '@/app/lib/auth-client'
 
 export default function RegisterForm({ callbackUrl }) {
@@ -49,12 +50,6 @@ export default function RegisterForm({ callbackUrl }) {
         })
     }
 
-    const inputClass =
-        'w-full rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-4 py-2.5 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 dark:placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition'
-
-    const labelClass =
-        'text-sm font-medium text-zinc-800 dark:text-zinc-200'
-
     return (
         <div className="w-full max-w-md mx-auto">
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -64,15 +59,11 @@ export default function RegisterForm({ callbackUrl }) {
                     </div>
                 )}
 
-                <div className="flex flex-col gap-1.5">
-                    <label
-                        htmlFor="register-name"
-                        className={labelClass}
-                    >
+                <div className="flex flex-col gap-1">
+                    <Label htmlFor="register-name">
                         Full Name
-                    </label>
-
-                    <input
+                    </Label>
+                    <Input
                         id="register-name"
                         type="text"
                         autoComplete="name"
@@ -80,19 +71,15 @@ export default function RegisterForm({ callbackUrl }) {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Jane Smith"
-                        className={inputClass}
+                        className="rounded border-2"
                     />
                 </div>
 
-                <div className="flex flex-col gap-1.5">
-                    <label
-                        htmlFor="register-email"
-                        className={labelClass}
-                    >
+                <div className="flex flex-col gap-1">
+                    <Label htmlFor="register-email">
                         Email
-                    </label>
-
-                    <input
+                    </Label>
+                    <Input
                         id="register-email"
                         type="email"
                         autoComplete="email"
@@ -100,19 +87,15 @@ export default function RegisterForm({ callbackUrl }) {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="you@example.com"
-                        className={inputClass}
+                        className="rounded border-2"
                     />
                 </div>
 
-                <div className="flex flex-col gap-1.5">
-                    <label
-                        htmlFor="register-password"
-                        className={labelClass}
-                    >
+                <div className="flex flex-col gap-1">
+                    <Label htmlFor="register-password">
                         Password
-                    </label>
-
-                    <input
+                    </Label>
+                    <Input
                         id="register-password"
                         type="password"
                         autoComplete="new-password"
@@ -121,14 +104,14 @@ export default function RegisterForm({ callbackUrl }) {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Minimum 8 characters"
-                        className={inputClass}
+                        className="rounded border-2"
                     />
                 </div>
 
                 <button
                     type="submit"
                     disabled={loading}
-                    className="mt-2 w-full rounded-xl bg-linear-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-2.5 text-sm shadow-lg shadow-orange-500/20 transition-all duration-300 hover:-translate-y-0.5"
+                    className="mt-2 w-full rounded bg-linear-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-2.5 text-sm shadow-lg shadow-orange-500/20 transition-all duration-300 hover:-translate-y-0.5"
                 >
                     {loading
                         ? 'Creating account...'
@@ -148,7 +131,7 @@ export default function RegisterForm({ callbackUrl }) {
                 <button
                     type="button"
                     onClick={handleGoogleSignIn}
-                    className="flex items-center justify-center gap-2.5 w-full rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 font-semibold py-2.5 text-sm transition-all duration-200"
+                    className="flex items-center justify-center gap-2.5 w-full rounded border-2 border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 font-semibold py-2.5 text-sm transition-all duration-200"
                 >
                     <svg
                         className="w-4 h-4"
@@ -173,7 +156,7 @@ export default function RegisterForm({ callbackUrl }) {
                         />
                     </svg>
 
-                    Google
+                    Continue With Google
                 </button>
             </form>
 
