@@ -10,19 +10,25 @@ export const auth = betterAuth({
         client
     }),
     user: {
-       additionalFields: {
-          role: {
-              type: "string",
-              input: false
+        additionalFields: {
+            role: {
+                type: "string",
+                input: false
             },
-            isBlocked:{
-                type:"boolean",
-                input:false
-            }, 
-            isPremium:{
-                type:"boolean",
-                input:false,
-                defaultValue:false
+            isBlocked: {
+                type: "boolean",
+                input: false,
+                defaultValue: false
+            },
+            isPremium: {
+                type: "boolean",
+                input: false,
+                defaultValue: false
+            },
+            uploaded: {
+                type: "number",
+                input: false,
+                defaultValue: 0
             },
             createdAt: {
                 type: "date",

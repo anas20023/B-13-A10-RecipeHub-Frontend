@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button, Input, Label } from '@heroui/react'
 import { authClient } from '@/app/lib/auth-client'
+import toast from 'react-hot-toast'
 
 export default function RegisterForm({ callbackUrl }) {
     const router = useRouter()
@@ -34,14 +35,12 @@ export default function RegisterForm({ callbackUrl }) {
         setLoading(false)
 
         if (signUpError) {
-            setError(
-                signUpError.message ||
-                'Registration failed. Please try again.'
-            )
+            toast.error(signUpError.message ||'Registration failed. Please try again.')
             return
         }
 
         router.replace(redirectTo)
+        toast.success("Registration Successful")
     }
 
     const handleGoogleSignIn = async () => {

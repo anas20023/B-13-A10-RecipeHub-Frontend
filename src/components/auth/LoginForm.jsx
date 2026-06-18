@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { authClient } from '@/app/lib/auth-client'
 import { Input, Button } from '@heroui/react'
+import toast from 'react-hot-toast'
 // using inline colored Google SVG
 
 export default function LoginForm({ callbackUrl }) {
@@ -29,11 +30,13 @@ export default function LoginForm({ callbackUrl }) {
         setLoading(false)
 
         if (signInError) {
-            setError(signInError.message || 'Invalid email or password.')
+            // setError(signInError.message || 'Invalid email or password.')
+            toast.error(signInError.message || 'Invalid email or password.')
             return
         }
 
         router.replace(redirectTo)
+        toast.success("Login Successfull")
     }
 
     const handleGoogleSignIn = async () => {

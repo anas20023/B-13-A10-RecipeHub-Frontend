@@ -12,6 +12,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import NavLink from './NavLink'
 import { authClient } from '@/app/lib/auth-client'
 import { useTheme } from '@/context/ThemeContext'
+import toast from 'react-hot-toast'
 
 export default function Navbar() {
     const router = useRouter()
@@ -58,9 +59,13 @@ export default function Navbar() {
     const onLogout = async () => {
         await authClient.signOut({
             fetchOptions: {
-                onSuccess: () => router.push('/login'),
+                onSuccess: () =>{
+                     router.push('/login')
+                     toast.success("Logged Out")
+                },
             },
         })
+        
     }
 
     return (
