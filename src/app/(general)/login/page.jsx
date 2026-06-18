@@ -17,7 +17,7 @@ export default async function LoginPage({ searchParams }) {
         <main className="flex flex-1 items-center justify-center px-4 py-16">
             <div className="w-full max-w-md rounded-2xl border border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xl shadow-orange-500/5 p-8">
                 <div className="mb-8 text-center">
-                    <h1 className="text-2xl font-extrabold text-stone-900 dark:text-zinc-50 tracking-tight">
+                    <h1 className="text-2xl font-extrabold text-stone-900 dark:text-zinc-500 tracking-tight">
                         Welcome back
                     </h1>
                     <p className="mt-1.5 text-sm text-stone-500 dark:text-zinc-400">

@@ -7,15 +7,15 @@ const db = client.db("RecipeHub");
 
 export const auth = betterAuth({
     database: mongodbAdapter(db, {
-        client,
-        emailAndPassword: {
-            enabled: true,
-        },
-        socialProviders: {
-            google: {
-                clientId: process.env.GOOGLE_CLIENT_ID ,
-                clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            },
-        },
+        client
     }),
+    emailAndPassword: {
+        enabled: true,
+    },
+    socialProviders: {
+        google: {
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        },
+    },
 });
