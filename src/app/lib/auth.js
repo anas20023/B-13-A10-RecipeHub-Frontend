@@ -21,7 +21,8 @@ export const auth = betterAuth({
             }, 
             isPremium:{
                 type:"boolean",
-                input:false
+                input:false,
+                defaultValue:false
             },
             createdAt: {
                 type: "date",
