@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
+import { jwt } from "better-auth/plugins";
 
 const client = new MongoClient(process.env.MONGO);
 const db = client.db("RecipeHub");
@@ -13,7 +14,8 @@ export const auth = betterAuth({
         additionalFields: {
             role: {
                 type: "string",
-                input: false
+                input: false,
+                defaultValue: "user"
             },
             isBlocked: {
                 type: "boolean",
@@ -63,5 +65,8 @@ export const auth = betterAuth({
             enabled: true,
             maxAge: 5 * 60 // Cache duration in seconds (5 minutes)
         }
-    }
+    },
+    plugins: [
+        jwt(),
+    ]
 });
