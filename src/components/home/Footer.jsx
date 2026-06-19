@@ -1,4 +1,4 @@
-import { ChefHat } from 'lucide-react'
+import { Button } from '@heroui/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
@@ -156,38 +156,14 @@ export default function Footer() {
                                 const Icon = social.icon
 
                                 return (
-                                    <Link
+                                    <Button
                                         key={social.name}
                                         href={social.href}
                                         target="_blank"
-                                        className="
-                                        flex h-11 w-11 items-center justify-center
-
-                                        rounded-xl
-
-                                        border border-slate-200
-                                        bg-white
-
-                                        text-slate-600
-
-                                        dark:border-zinc-800
-                                        dark:bg-zinc-900/80
-                                        dark:text-slate-400
-
-                                        transition-all duration-300
-
-                                        hover:-translate-y-1
-                                        hover:border-orange-300
-                                        hover:bg-orange-50
-                                        hover:text-orange-600
-
-                                        dark:hover:border-orange-500/30
-                                        dark:hover:bg-orange-500/10
-                                        dark:hover:text-orange-400
-                                        "
+                                        className="flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-all duration-200 hover:text-orange-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-orange-400"
                                     >
-                                        <Icon size={18} />
-                                    </Link>
+                                        <Icon size={18} className="text-current" />
+                                    </Button>
                                 )
                             })}
                         </div>
