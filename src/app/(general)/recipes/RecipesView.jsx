@@ -283,11 +283,11 @@ export default function RecipesClient({ recipes = [], pagination = {} }) {
                         
                                             rounded-full
                         
-                                            bg-white/90
-                                            text-slate-700
+                                            bg-green-300
+                                            text-slate-900
                         
-                                            dark:bg-zinc-900/90
-                                            dark:text-slate-300
+                                            dark:bg-green-900/90
+                                            dark:text-slate-100
                         
                                             px-3 py-1
                                             backdrop-blur
@@ -295,7 +295,7 @@ export default function RecipesClient({ recipes = [], pagination = {} }) {
                                 >
                                     <Clock3 size={14} />
                                     <span className="text-xs font-medium">
-                                        {recipe.preparationTime}
+                                        {recipe.preparationTime} mins
                                     </span>
                                 </div>
                             </div>
