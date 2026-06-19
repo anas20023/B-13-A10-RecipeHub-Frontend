@@ -1,13 +1,9 @@
-import { Spinner } from '@heroui/react'
-import React from 'react'
+import { Spinner } from "@heroui/react";
 
-const loading = () => {
+export default function Loading() {
     return (
-        <div className="flex flex-col h-screen items-center justify-center gap-2">
-            <Spinner color="accent"  className='text-orange-500'/>
-            {/* <span className="text-xs text-muted">Loading</span> */}
+        <div className="flex justify-center items-center min-h-screen">
+            <Spinner size="lg" color="accent" label="Loading..."  />
         </div>
-    )
+    );
 }
-
-export default loading

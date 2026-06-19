@@ -1,2 +1,11 @@
-@import "tailwindcss";
-@import "@heroui/styles";
+@import 'tailwindcss';
+@import '@heroui/styles';
+@layer components {
+    .spinner {
+        @apply animate-spin;
+    }
+
+    .spinner--accent {
+        color: var(--accent);
+    }
+}
