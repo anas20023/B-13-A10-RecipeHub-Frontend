@@ -35,7 +35,7 @@ export default function RootLayout({ children }) {
       className={`${geistSans.className} ${plusJakarta.variable} ${inter.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-zinc-50 transition-colors duration-300">
+      <body className="min-h-full flex flex-col">
         <Script
           id="theme-initializer"
           strategy="beforeInteractive"

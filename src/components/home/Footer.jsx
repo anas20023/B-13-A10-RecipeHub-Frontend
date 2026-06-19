@@ -1,9 +1,13 @@
-'use client'
-
 import { ChefHat } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { FaFacebook, FaGithub, FaLinkedin, FaLocationArrow, FaPhoneAlt } from 'react-icons/fa'
+import {
+    FaFacebook,
+    FaGithub,
+    FaLinkedin,
+    FaLocationArrow,
+    FaPhoneAlt,
+} from 'react-icons/fa'
 import { SiMinutemailer } from 'react-icons/si'
 
 const quickLinks = [
@@ -33,14 +37,25 @@ const socialLinks = [
 
 export default function Footer() {
     return (
-        <footer className="relative mt-20 border-t border-orange-100 bg-white">
-            {/* Top Gradient Glow */}
-            <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-orange-500 to-transparent" />
+        <footer className="relative overflow-hidden border-t border-orange-100 dark:border-zinc-800">
+            {/* Background */}
+            <div
+                className="
+                absolute inset-0 -z-10
+
+                bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,0.08),transparent_30%),radial-gradient(circle_at_top_right,rgba(251,191,36,0.06),transparent_25%),linear-gradient(180deg,#ffffff_0%,#fffaf5_50%,#fff7ed_100%)]
+
+                dark:bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,0.10),transparent_28%),radial-gradient(circle_at_top_right,rgba(251,191,36,0.08),transparent_24%),linear-gradient(180deg,#09090b_0%,#111113_45%,#18181b_100%)]
+                "
+            />
+
+            <div className="absolute left-0 top-20 h-72 w-72 rounded-full bg-orange-500/5 blur-3xl" />
+            <div className="absolute right-0 bottom-0 h-80 w-80 rounded-full bg-amber-500/5 blur-3xl" />
 
             <div className="mx-auto max-w-7xl px-6 py-16">
-                <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+                <div className="grid grid-cols-12 gap-12">
                     {/* Brand */}
-                    <div>
+                    <div className="col-span-12 sm:col-span-6 lg:col-span-4">
                         <Link
                             href="/"
                             className="flex items-center gap-3"
@@ -54,26 +69,26 @@ export default function Footer() {
                             />
 
                             <div>
-                                <h3 className="text-xl font-bold text-zinc-900">
+                                <h3 className="text-xl font-bold text-slate-900 dark:text-slate-50">
                                     RecipeHub
                                 </h3>
-                                <p className="text-sm text-zinc-500">
+
+                                <p className="text-sm text-slate-500 dark:text-slate-400">
                                     Share • Discover • Cook
                                 </p>
                             </div>
                         </Link>
 
-                        <p className="mt-4 text-sm leading-relaxed text-zinc-600">
-                            Discover delicious recipes,
-                            share your culinary creations,
-                            and connect with food lovers
-                            around the world.
+                        <p className="mt-4 leading-relaxed text-slate-600 dark:text-slate-400">
+                            Discover delicious recipes, share your culinary
+                            creations, and connect with food lovers around
+                            the world.
                         </p>
                     </div>
 
-                    {/* Quick Links */}
-                    <div>
-                        <h4 className="mb-4 text-lg font-semibold text-zinc-900">
+                    {/* Links */}
+                    <div className="col-span-12 sm:col-span-6 lg:col-span-3">
+                        <h4 className="mb-5 text-lg font-semibold text-slate-900 dark:text-slate-50">
                             Quick Links
                         </h4>
 
@@ -82,7 +97,7 @@ export default function Footer() {
                                 <li key={link.name}>
                                     <Link
                                         href={link.href}
-                                        className="text-zinc-600 transition-colors hover:text-orange-600"
+                                        className="text-slate-600 transition-colors hover:text-orange-600 dark:text-slate-400 dark:hover:text-orange-400"
                                     >
                                         {link.name}
                                     </Link>
@@ -91,39 +106,39 @@ export default function Footer() {
                         </ul>
                     </div>
 
-                    {/* Contact Info */}
-                    <div>
-                        <h4 className="mb-4 text-lg font-semibold text-zinc-900">
+                    {/* Contact */}
+                    <div className="col-span-12 sm:col-span-6 lg:col-span-3">
+                        <h4 className="mb-5 text-lg font-semibold text-slate-900 dark:text-slate-50">
                             Contact
                         </h4>
 
                         <div className="space-y-4">
                             <div className="flex items-start gap-3">
-                                <SiMinutemailer 
+                                <SiMinutemailer
                                     size={18}
                                     className="mt-0.5 text-orange-500"
                                 />
-                                <span className="text-sm text-zinc-600">
+                                <span className="text-sm text-slate-600 dark:text-slate-400">
                                     support@recipehub.com
                                 </span>
                             </div>
 
                             <div className="flex items-start gap-3">
-                                <FaPhoneAlt 
+                                <FaPhoneAlt
                                     size={18}
                                     className="mt-0.5 text-orange-500"
                                 />
-                                <span className="text-sm text-zinc-600">
+                                <span className="text-sm text-slate-600 dark:text-slate-400">
                                     +880 1234 567890
                                 </span>
                             </div>
 
                             <div className="flex items-start gap-3">
-                                <FaLocationArrow 
+                                <FaLocationArrow
                                     size={18}
                                     className="mt-0.5 text-orange-500"
                                 />
-                                <span className="text-sm text-zinc-600">
+                                <span className="text-sm text-slate-600 dark:text-slate-400">
                                     Dhaka, Bangladesh
                                 </span>
                             </div>
@@ -131,8 +146,8 @@ export default function Footer() {
                     </div>
 
                     {/* Social */}
-                    <div>
-                        <h4 className="mb-4 text-lg font-semibold text-zinc-900">
+                    <div className="col-span-12 sm:col-span-6 lg:col-span-2">
+                        <h4 className="mb-5 text-lg font-semibold text-slate-900 dark:text-slate-50">
                             Follow Us
                         </h4>
 
@@ -145,7 +160,31 @@ export default function Footer() {
                                         key={social.name}
                                         href={social.href}
                                         target="_blank"
-                                        className="flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-600 transition-all duration-300 hover:-translate-y-1 hover:border-orange-300 hover:bg-orange-50 hover:text-orange-600"
+                                        className="
+                                        flex h-11 w-11 items-center justify-center
+
+                                        rounded-xl
+
+                                        border border-slate-200
+                                        bg-white
+
+                                        text-slate-600
+
+                                        dark:border-zinc-800
+                                        dark:bg-zinc-900/80
+                                        dark:text-slate-400
+
+                                        transition-all duration-300
+
+                                        hover:-translate-y-1
+                                        hover:border-orange-300
+                                        hover:bg-orange-50
+                                        hover:text-orange-600
+
+                                        dark:hover:border-orange-500/30
+                                        dark:hover:bg-orange-500/10
+                                        dark:hover:text-orange-400
+                                        "
                                     >
                                         <Icon size={18} />
                                     </Link>
@@ -153,29 +192,47 @@ export default function Footer() {
                             })}
                         </div>
 
-                        <div className="mt-6 rounded-2xl border border-orange-100 bg-linear-to-br from-orange-50 to-amber-50 p-4">
+                        {/* <div
+                            className="
+                            mt-6
+
+                            rounded-2xl
+
+                            border border-orange-100
+                            bg-linear-to-br
+                            from-orange-50
+                            to-amber-50
+
+                            dark:border-zinc-800
+                            dark:from-zinc-900
+                            dark:to-zinc-950
+
+                            p-4
+                            "
+                        >
                             <div className="flex items-center gap-2">
                                 <ChefHat
                                     size={18}
-                                    className="text-orange-600"
+                                    className="text-orange-500"
                                 />
-                                <span className="font-semibold text-zinc-900">
+
+                                <span className="font-semibold text-slate-900 dark:text-slate-50">
                                     Join Our Community
                                 </span>
                             </div>
 
-                            <p className="mt-2 text-sm text-zinc-600">
-                                Share recipes and inspire
-                                thousands of food lovers.
+                            <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+                                Share recipes and inspire thousands
+                                of food lovers.
                             </p>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
                 {/* Bottom */}
-                <div className="mt-12 border-t border-zinc-200 pt-6">
+                <div className="mt-12 border-t border-slate-200 pt-6 dark:border-zinc-800">
                     <div className="flex flex-col items-center justify-between gap-4 text-center md:flex-row">
-                        <p className="text-sm text-zinc-500">
+                        <p className="text-sm text-slate-500 dark:text-slate-500">
                             © {new Date().getFullYear()} RecipeHub.
                             All rights reserved.
                         </p>
@@ -183,14 +240,14 @@ export default function Footer() {
                         <div className="flex gap-6 text-sm">
                             <Link
                                 href="/privacy-policy"
-                                className="text-zinc-500 hover:text-orange-600"
+                                className="text-slate-500 transition-colors hover:text-orange-600 dark:hover:text-orange-400"
                             >
                                 Privacy Policy
                             </Link>
 
                             <Link
                                 href="/terms"
-                                className="text-zinc-500 hover:text-orange-600"
+                                className="text-slate-500 transition-colors hover:text-orange-600 dark:hover:text-orange-400"
                             >
                                 Terms of Service
                             </Link>
