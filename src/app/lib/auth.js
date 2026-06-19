@@ -42,12 +42,12 @@ export const auth = betterAuth({
     },
     emailAndPassword: {
         enabled: true,
-        minPasswordLength: 6, 
+        minPasswordLength: 6,
         maxPasswordLength: 128, // Set maximum length
         password: {
             validator: {
                 // Enforce custom rule: minimum 6 characters with uppercase, lowercase, number, and special character
-                rule: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{6,}$/, 
+                rule: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{6,}$/,
                 message: "Password must be at least 6 characters and include one uppercase letter, one lowercase letter, one number, and one special character.",
             },
         },
@@ -58,4 +58,10 @@ export const auth = betterAuth({
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         },
     },
+    session: {
+        cookieCache: {
+            enabled: true,
+            maxAge: 5 * 60 // Cache duration in seconds (5 minutes)
+        }
+    }
 });
