@@ -73,7 +73,7 @@ export default function RegisterForm({ callbackUrl }) {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Jane Smith"
-                        className="rounded border-2"
+                        className="rounded border-2 dark:border-white/25"
                     />
                 </div>
 
@@ -89,7 +89,7 @@ export default function RegisterForm({ callbackUrl }) {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="you@example.com"
-                        className="rounded border-2"
+                        className="rounded border-2 dark:border-white/25"
                     />
                 </div>
                 <div className="flex flex-col gap-1">
@@ -103,7 +103,7 @@ export default function RegisterForm({ callbackUrl }) {
                         value={image}
                         onChange={(e) => setImage(e.target.value)}
                         placeholder="https://imagebb.co/..."
-                        className="rounded border-2"
+                        className="rounded border-2 dark:border-white/25"
                     />
                 </div>
 
@@ -120,7 +120,7 @@ export default function RegisterForm({ callbackUrl }) {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Minimum 8 characters"
-                        className="rounded border-2"
+                        className="rounded border-2 dark:border-white/25"
                     />
                 </div>
 

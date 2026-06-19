@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation"
 
 const NavLink = ({ children, link, className = '', onClick }) => {
     const pathname = usePathname()
-    const isActive = pathname === link
+    const isActive = pathname === link || pathname.startsWith(link + '/')
 
     return (
         <Link

@@ -69,7 +69,7 @@ export default function LoginForm({ callbackUrl }) {
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="you@example.com"
                         fullWidth
-                        className="rounded border-2"
+                        className="rounded border-2 dark:border-white/25"
                     />
                 </div>
 
@@ -86,7 +86,7 @@ export default function LoginForm({ callbackUrl }) {
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
                         fullWidth
-                        className="rounded border-2"
+                        className="rounded border-2 dark:border-white/25"
                     />
                 </div>
 

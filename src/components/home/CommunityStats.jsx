@@ -32,7 +32,7 @@ export default function CommunityStats() {
     return (
         <section className="py-24">
             <div className="mx-auto max-w-7xl px-6 xl:px-8">
-                <div className="rounded-[2rem] border border-orange-100 bg-white p-10 shadow-xl shadow-orange-100/40 dark:border-zinc-800 dark:bg-zinc-900/80">
+                <div className="rounded-[2rem] border border-orange-100 bg-white p-10 shadow dark:border-zinc-800 dark:bg-zinc-900/80">
                     <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-4">
                         {stats.map((stat) => {
                             const Icon = stat.icon
