@@ -35,10 +35,11 @@ export default function Navbar() {
     const navItems = [
         { href: '/', label: 'Home' },
         { href: '/recipes', label: 'Browse Recipes' },
+        { href: '/dashboard', label: 'Dashboard' },
     ]
-    if (user) {
-        navItems.push({ href: `/dashboard/${user?.role}`, label: 'Dashboard' })
-    }
+    // if (user) {
+    //     navItems.push({ href: `/dashboard/${user?.role}`, label: 'Dashboard' })
+    // }
 
     const [isOpen, setIsOpen] = useState(false)
     const [isAvatarOpen, setIsAvatarOpen] = useState(false)

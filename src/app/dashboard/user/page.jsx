@@ -96,6 +96,10 @@ export default async function UserDashboardPage() {
         })),
     ].slice(0, 5);
 
+    const bannerGradient = user.isPremium
+        ? "mb-6 rounded-2xl bg-linear-to-r from-orange-500 to-amber-600 p-6 text-white shadow-lg shadow-orange-500/20"
+        : "mb-6 rounded-2xl bg-linear-to-r from-slate-300 to-slate-100 p-6 text-slate-900 shadow-md shadow-slate-300/30";
+
     return (
         <DashboardShell
             user={user}
@@ -106,7 +110,7 @@ export default async function UserDashboardPage() {
             brandName="RecipeHub"
         >
             {/* Welcome banner */}
-            <div className="mb-6 rounded-2xl bg-linear-to-r from-orange-500 to-amber-600 p-6 text-white shadow-lg shadow-orange-500/20">
+            <div className={bannerGradient}>
                 <div className="flex items-center justify-between gap-4">
                     <div>
                         <h2 className="text-xl font-bold">Welcome back, {user.name?.split(" ")[0]}! 👋</h2>
