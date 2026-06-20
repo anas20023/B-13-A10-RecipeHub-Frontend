@@ -33,8 +33,9 @@ const RecipeTableUI = ({ serialized }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedRecipe, setSelectedRecipe] = useState(null);
     const [isUpdating, setIsUpdating] = useState(false);
+    const [deletingId, setDeletingId] = useState(null);
     const [formData, setFormData] = useState({});
-    const router=useRouter()
+    const router = useRouter()
     const openModal = (recipe) => {
         setSelectedRecipe(recipe);
         setFormData({
@@ -111,7 +112,7 @@ const RecipeTableUI = ({ serialized }) => {
             }
             router.refresh()
             toast.success(result?.message || "Recipe updated successfully")
-            
+
             setIsOpen(false);
         } catch (error) {
             toast.error(error?.message || "Failed to update recipe");
@@ -119,7 +120,37 @@ const RecipeTableUI = ({ serialized }) => {
             setIsUpdating(false);
         }
     };
+    const handleDelete = async (id) => {
+        if (!id) return;
+        try {
+            setDeletingId(id);
+            const { data } = await authClient.token();
+            const bearerToken = data?.token
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/recipes/${id}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${bearerToken}`
+                    },
+                }
+            );
 
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result?.message || "Failed to delete recipe");
+            }
+            router.refresh()
+            toast.success(result?.message || "Recipe Deleted successfully")
+
+            setIsOpen(false);
+        } catch (error) {
+            toast.error(error?.message || "Failed to update recipe");
+        } finally {
+            setDeletingId(null);
+        }
+    }
     const set = (key) => (e) =>
         setFormData((prev) => ({ ...prev, [key]: e.target.value }));
 
@@ -242,23 +273,23 @@ const RecipeTableUI = ({ serialized }) => {
                                         <Table.Cell>
                                             <div className="flex items-center gap-2">
                                                 {/* Edit — opens modal */}
-                                                <button
-                                                    type="button"
+                                                <Button
                                                     onClick={() => openModal(recipe)}
                                                     aria-label="Edit recipe"
                                                     title="Edit"
                                                     className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
                                                 >
                                                     <Pencil className="h-4 w-4" />
-                                                </button>
+                                                </Button>
 
                                                 {/* Delete */}
                                                 <Button
                                                     aria-label="Delete recipe"
                                                     title="Delete"
+                                                    onClick={() => {handleDelete(recipe._id) }}
                                                     className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-950/40 dark:text-red-400 dark:hover:bg-red-950/60"
                                                 >
-                                                    <Trash2 className="h-4 w-4" />
+                                                  {isUpdating ? <Spinner size="sm" className="text-orange-500 dark:text-white"/>  :<Trash2 className="h-4 w-4" />}
                                                 </Button>
                                             </div>
                                         </Table.Cell>
