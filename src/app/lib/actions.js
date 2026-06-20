@@ -6,90 +6,184 @@ import { auth } from "./auth";
 import { getDb } from "./db";
 import { ObjectId } from "mongodb";
 
-// Helper to get session user
-async function getSessionUser() {
+function extractBearerToken(requestHeaders) {
+  const authorization = requestHeaders.get("authorization");
+
+  if (!authorization?.startsWith("Bearer ")) {
+    return null;
+  }
+
+  return authorization.substring(7).trim();
+}
+
+export async function getSessionUser() {
     const session = await auth.api.getSession({
         headers: await headers(),
     });
+
     return session?.user || null;
 }
 
-// User Action: Add/Create Recipe
-export async function createRecipeAction(recipeData) {
+export async function findUserDocument(db, user) {
+    let dbUser = await db.collection("user").findOne({
+        email: user.email,
+    });
+
+    if (dbUser) return dbUser;
+
+    dbUser = await db.collection("user").findOne({
+        id: user.id,
+    });
+
+    if (dbUser) return dbUser;
+
+    if (ObjectId.isValid(user.id)) {
+        dbUser = await db.collection("user").findOne({
+            _id: new ObjectId(user.id),
+        });
+
+        if (dbUser) return dbUser;
+    }
+
+    return null;
+}
+
+export async function getVerifiedUser(
+    authToken,
+    db,
+    requiredRole = "user"
+) {
+    const requestHeaders = await headers();
+
+    const session = await auth.api.getSession({
+        headers: requestHeaders,
+    });
+
+    const sessionUser = session?.user;
+
+    if (!sessionUser) {
+        return {
+            user: null,
+            error: "Unauthorized.",
+        };
+    }
+
+    const token = authToken || extractBearerToken(requestHeaders);
+
+    if (!token) {
+        return {
+            user: null,
+            error: "Verification token required.",
+        };
+    }
+
     try {
-        const user = await getSessionUser();
-        if (!user) {
-            return { success: false, error: "Unauthorized. Please log in." };
+        const verification = await auth.api.verifyJWT({
+            body: {
+                token,
+            },
+        });
+
+        const payload = verification?.payload;
+
+        if (!payload?.sub) {
+            return {
+                user: null,
+                error: "Invalid verification token.",
+            };
         }
 
-        const db = await getDb();
-        const priceVal = parseFloat(recipeData.price);
+        if (payload.sub !== sessionUser.id) {
+            return {
+                user: null,
+                error: "Token user mismatch.",
+            };
+        }
 
-        const newRecipe = {
-            recipeName: recipeData.recipeName,
-            recipeImage: recipeData.recipeImage || "/default-recipe.jpg",
-            preparationTime: parseInt(recipeData.preparationTime) || 30,
-            category: recipeData.category || "Main Course",
-            difficultyLevel: recipeData.difficultyLevel || "Medium",
-            cuisineType: recipeData.cuisineType || "International",
-            price: Number.isNaN(priceVal) ? 0 : priceVal,
-            ingredients: recipeData.ingredients || [],
-            instructions: recipeData.instructions || [],
-            authorName: user.name,
-            authorEmail: user.email,
-            likesCount: 0,
-            purchasedBy: [],
-            favoritedBy: [],
-            isFeatured: false,
-            reports: [],
-            createdAt: new Date(),
-            updatedAt: new Date(),
+        const freshUser = await findUserDocument(db, sessionUser);
+
+        if (!freshUser) {
+            return {
+                user: null,
+                error: "User not found.",
+            };
+        }
+
+        if (freshUser.isBlocked) {
+            return {
+                user: null,
+                error: "Your account has been blocked.",
+            };
+        }
+
+        if (freshUser.role !== requiredRole) {
+            return {
+                user: null,
+                error: `${requiredRole} permission required.`,
+            };
+        }
+
+        return {
+            user: freshUser,
+            error: null,
         };
+    } catch (error) {
+        console.error("Verification Error:", error);
 
-        const result = await db.collection("recipes").insertOne(newRecipe);
-
-        // Update user uploaded count
-        await db.collection("user").updateOne(
-            { email: user.email },
-            { $inc: { uploaded: 1 } }
-        );
-
-        revalidatePath("/dashboard/user/my-recipes");
-        revalidatePath("/recipes");
-        return { success: true, recipeId: result.insertedId.toString() };
-    } catch (err) {
-        console.error("Error creating recipe:", err);
-        return { success: false, error: err.message };
+        return {
+            user: null,
+            error: "Invalid verification token.",
+        };
     }
 }
 
-// User Action: Delete Recipe
-export async function deleteRecipeAction(recipeId) {
+export async function getVerifiedAdminUser(
+    authToken,
+    db
+) {
+    return getVerifiedUser(authToken, db, "admin");
+}
+
+export async function getVerifiedNormalUser(
+    authToken,
+    db
+) {
+    return getVerifiedUser(authToken, db, "user");
+}
+// User Action
+export async function deleteRecipeAction(recipeId, authToken) {
     try {
         const user = await getSessionUser();
-        if (!user) {
+        if (!user || !getVerifiedNormalUser(user.token,"user")) {
             return { success: false, error: "Unauthorized." };
         }
 
         const db = await getDb();
-        const recipe = await db.collection("recipes").findOne({ _id: new ObjectId(recipeId) });
+        const recipe = await db
+            .collection("recipes")
+            .findOne({ _id: new ObjectId(recipeId) });
 
         if (!recipe) {
             return { success: false, error: "Recipe not found." };
         }
 
         // Only author or admin can delete
-        if (recipe.authorEmail !== user.email && user.role !== "admin") {
-            return { success: false, error: "You are not authorized to delete this recipe." };
+        if (recipe.authorEmail !== user.email) {
+            const { user: adminUser, error } = await getVerifiedAdminUser(authToken, db);
+            if (!adminUser) {
+                return {
+                    success: false,
+                    error: error || "You are not authorized to delete this recipe.",
+                };
+            }
         }
 
         await db.collection("recipes").deleteOne({ _id: new ObjectId(recipeId) });
 
         // Decrement author's uploaded count
-        await db.collection("user").updateOne(
-            { email: recipe.authorEmail },
-            { $inc: { uploaded: -1 } }
-        );
+        await db
+            .collection("user")
+            .updateOne({ email: recipe.authorEmail }, { $inc: { uploaded: -1 } });
 
         revalidatePath("/dashboard/user/my-recipes");
         revalidatePath("/recipes");
@@ -110,7 +204,9 @@ export async function toggleFavoriteAction(recipeId) {
         }
 
         const db = await getDb();
-        const recipe = await db.collection("recipes").findOne({ _id: new ObjectId(recipeId) });
+        const recipe = await db
+            .collection("recipes")
+            .findOne({ _id: new ObjectId(recipeId) });
 
         if (!recipe) {
             return { success: false, error: "Recipe not found." };
@@ -121,10 +217,9 @@ export async function toggleFavoriteAction(recipeId) {
 
         if (favoritedBy.includes(user.email)) {
             // Remove
-            await db.collection("recipes").updateOne(
-                { _id: new ObjectId(recipeId) },
-                { $pull: { favoritedBy: user.email } }
-            );
+            await db
+                .collection("recipes")
+                .updateOne({ _id: new ObjectId(recipeId) }, { $pull: { favoritedBy: user.email } });
         } else {
             // Add
             await db.collection("recipes").updateOne(
@@ -152,7 +247,9 @@ export async function purchaseRecipeAction(recipeId) {
         }
 
         const db = await getDb();
-        const recipe = await db.collection("recipes").findOne({ _id: new ObjectId(recipeId) });
+        const recipe = await db
+            .collection("recipes")
+            .findOne({ _id: new ObjectId(recipeId) });
 
         if (!recipe) {
             return { success: false, error: "Recipe not found." };
@@ -233,17 +330,14 @@ export async function updateProfileAction(profileData) {
         }
 
         const db = await getDb();
-        
+
         const updateFields = {
             name: profileData.name || user.name,
             image: profileData.image || user.image,
             updatedAt: new Date(),
         };
 
-        await db.collection("user").updateOne(
-            { email: user.email },
-            { $set: updateFields }
-        );
+        await db.collection("user").updateOne({ email: user.email }, { $set: updateFields });
 
         revalidatePath("/dashboard/user/profile");
         revalidatePath("/dashboard/admin/profile");
@@ -289,14 +383,13 @@ export async function buyPremiumAction() {
 }
 
 // Admin Action: Dismiss Reports
-export async function dismissReportsAction(recipeId) {
+export async function dismissReportsAction(recipeId, authToken) {
     try {
-        const user = await getSessionUser();
-        if (!user || user.role !== "admin") {
+        const db = await getDb();
+        const { user } = await getVerifiedAdminUser(authToken, db);
+        if (!user) {
             return { success: false, error: "Admin permission required." };
         }
-
-        const db = await getDb();
 
         await db.collection("recipes").updateOne(
             { _id: new ObjectId(recipeId) },
@@ -312,14 +405,13 @@ export async function dismissReportsAction(recipeId) {
 }
 
 // Admin Action: Toggle Featured Recipe
-export async function toggleFeaturedAction(recipeId, isFeatured) {
+export async function toggleFeaturedAction(recipeId, isFeatured, authToken) {
     try {
-        const user = await getSessionUser();
-        if (!user || user.role !== "admin") {
+        const db = await getDb();
+        const { user } = await getVerifiedAdminUser(authToken, db);
+        if (!user) {
             return { success: false, error: "Admin permission required." };
         }
-
-        const db = await getDb();
 
         await db.collection("recipes").updateOne(
             { _id: new ObjectId(recipeId) },
@@ -336,14 +428,13 @@ export async function toggleFeaturedAction(recipeId, isFeatured) {
 }
 
 // Admin Action: Toggle Block Status
-export async function updateUserBlockStatusAction(userId, isBlocked) {
+export async function updateUserBlockStatusAction(userId, isBlocked, authToken) {
     try {
-        const user = await getSessionUser();
-        if (!user || user.role !== "admin") {
+        const db = await getDb();
+        const { user } = await getVerifiedAdminUser(authToken, db);
+        if (!user) {
             return { success: false, error: "Admin permission required." };
         }
-
-        const db = await getDb();
 
         // ID in better-auth adapter can be a string or ObjectId depending on the store
         let query = { id: userId };
@@ -362,10 +453,9 @@ export async function updateUserBlockStatusAction(userId, isBlocked) {
             return { success: false, error: "User not found." };
         }
 
-        await db.collection("user").updateOne(
-            query,
-            { $set: { isBlocked: !!isBlocked, updatedAt: new Date() } }
-        );
+        await db.collection("user").updateOne(query, {
+            $set: { isBlocked: !!isBlocked, updatedAt: new Date() },
+        });
 
         revalidatePath("/dashboard/admin/users");
         return { success: true };
@@ -376,14 +466,13 @@ export async function updateUserBlockStatusAction(userId, isBlocked) {
 }
 
 // Admin Action: Change User Role
-export async function updateUserRoleAction(userId, role) {
+export async function updateUserRoleAction(userId, role, authToken) {
     try {
-        const user = await getSessionUser();
-        if (!user || user.role !== "admin") {
+        const db = await getDb();
+        const { user } = await getVerifiedAdminUser(authToken, db);
+        if (!user) {
             return { success: false, error: "Admin permission required." };
         }
-
-        const db = await getDb();
 
         // Try querying by string ID, ID field, or ObjectId
         let query = { id: userId };
@@ -401,10 +490,9 @@ export async function updateUserRoleAction(userId, role) {
             return { success: false, error: "User not found." };
         }
 
-        await db.collection("user").updateOne(
-            query,
-            { $set: { role: role, updatedAt: new Date() } }
-        );
+        await db.collection("user").updateOne(query, {
+            $set: { role: role, updatedAt: new Date() },
+        });
 
         revalidatePath("/dashboard/admin/users");
         return { success: true };

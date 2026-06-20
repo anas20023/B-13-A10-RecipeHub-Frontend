@@ -27,6 +27,9 @@ export default function AddRecipePage() {
     const router = useRouter();
     const { data: session } = authClient.useSession();
     const user = session?.user;
+    if(!user?.isPremium && user?.uploaded>=2){
+        router.push('/dashboard/user')
+    }
     const [isPending, startTransition] = useTransition();
 
     const [form, setForm] = useState({

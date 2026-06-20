@@ -98,12 +98,16 @@ export default function SidebarShell({
                 {navItems.map((item) => {
                     const Icon =
                         iconMap[item.icon] || Home;
+                    if (!user?.isPremium && user?.uploaded >= 2 && item.href === "/dashboard/user/add-recipe") {
+                        return null;
+                    }
 
                     const active =
-                        pathname === item.href 
-                        // (item.href !== "/dashboard/user" &&
-                        //     item.href !== "/dashboard/admin" &&
-                        //     pathname.startsWith(item.href));
+                        pathname === item.href
+                    // (item.href !== "/dashboard/user" &&
+                    //     item.href !== "/dashboard/admin" &&
+                    //     pathname.startsWith(item.href));
+
 
                     return (
                         <Link

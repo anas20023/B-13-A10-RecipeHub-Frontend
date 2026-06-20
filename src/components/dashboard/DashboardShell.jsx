@@ -32,12 +32,12 @@ export default function DashboardShell({
                             ) : null}
                         </div>
 
-                        <div className="text-sm text-slate-500 dark:text-slate-400">
+                        {/* <div className="text-sm text-slate-500 dark:text-slate-400">
                             Signed in as{" "}
                             <span className="font-medium text-slate-900 dark:text-slate-400">
                                 {user?.name}
                             </span>
-                        </div>
+                        </div> */}
                     </header>
 
                     {children}
