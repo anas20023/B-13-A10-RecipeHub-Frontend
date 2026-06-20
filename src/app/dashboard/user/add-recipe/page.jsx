@@ -194,7 +194,7 @@ export default function AddRecipePage() {
                                 id="category"
                                 value={form.category}
                                 onChange={(e) => update("category", e.target.value)}
-                                className="rounded border-2 border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-orange-400 dark:border-white/25 dark:bg-slate-900 dark:text-slate-100"
+                                className="rounded border-2 border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-orange-400 dark:border-white/25 dark:bg-slate-900 dark:text-slate-400"
                             >
                                 {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
                             </select>
@@ -207,7 +207,7 @@ export default function AddRecipePage() {
                                 id="difficultyLevel"
                                 value={form.difficultyLevel}
                                 onChange={(e) => update("difficultyLevel", e.target.value)}
-                                className="rounded border-2 border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-orange-400 dark:border-white/25 dark:bg-slate-900 dark:text-slate-100"
+                                className="rounded border-2 border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-orange-400 dark:border-white/25 dark:bg-slate-900 dark:text-slate-400"
                             >
                                 {DIFFICULTY_LEVELS.map((d) => <option key={d} value={d}>{d}</option>)}
                             </select>
@@ -220,7 +220,7 @@ export default function AddRecipePage() {
                                 id="cuisineType"
                                 value={form.cuisineType}
                                 onChange={(e) => update("cuisineType", e.target.value)}
-                                className="rounded border-2 border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-orange-400 dark:border-white/25 dark:bg-slate-900 dark:text-slate-100"
+                                className="rounded border-2 border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-orange-400 dark:border-white/25 dark:bg-slate-900 dark:text-slate-400"
                             >
                                 {CUISINE_TYPES.map((c) => <option key={c} value={c}>{c}</option>)}
                             </select>
