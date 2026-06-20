@@ -55,9 +55,9 @@ export default function RootLayout({ children }) {
           }}
         />
         <Providers>
-          <Navbar />
+          {/* <Navbar /> */}
           <main className="min-h-screen">{children}</main>
-          <Footer />
+          {/* <Footer /> */}
         </Providers>
         <Toaster position="top-center" />
       </body>

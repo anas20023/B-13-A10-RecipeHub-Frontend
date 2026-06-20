@@ -99,7 +99,6 @@ export default function RegisterForm({ callbackUrl }) {
                     <Input
                         id="photo_url"
                         type="text"
-                        required
                         value={image}
                         onChange={(e) => setImage(e.target.value)}
                         placeholder="https://imagebb.co/..."

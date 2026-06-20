@@ -14,7 +14,8 @@ export async function proxy(request) {
     const pathname = request.nextUrl.pathname
     if (pathname.startsWith('/dashboard')) {
         const roleDashboardPath = `/dashboard/${session.user.role}`
-        if (pathname !== roleDashboardPath) {
+        // allow the exact role dashboard or any sub-path under it
+        if (!(pathname === roleDashboardPath || pathname.startsWith(roleDashboardPath + '/'))) {
             return NextResponse.redirect(new URL(roleDashboardPath, request.url))
         }
     }
