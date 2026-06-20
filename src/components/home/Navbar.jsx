@@ -35,7 +35,7 @@ export default function Navbar() {
     const navItems = [
         { href: '/', label: 'Home' },
         { href: '/recipes', label: 'Browse Recipes' },
-        { href: '/dashboard', label: 'Dashboard' },
+        { href: `/dashboard/${user?.role}`, label: 'Dashboard' },
     ]
 
     const [isOpen, setIsOpen] = useState(false)
