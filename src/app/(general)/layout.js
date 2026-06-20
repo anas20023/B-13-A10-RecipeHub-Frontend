@@ -1,66 +1,19 @@
-import { Geist, Plus_Jakarta_Sans, Inter } from "next/font/google";
-import "@/app/globals.css"
-import { Providers } from "../providers";
 import Navbar from "@/components/home/Navbar";
-import Script from "next/script";
-import { Toaster } from "react-hot-toast";
 import Footer from "@/components/home/Footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-const plusJakarta = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta",
-  subsets: ['latin'],
-});
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: "--font-inter",
-});
-
 export const metadata = {
-  title: "RecipeHub - Recipe Sharing Platform",
-  description: `RecipeHub is a platform where food enthusiasts can create, share, discover, and manage recipes.
+    title: "RecipeHub - Recipe Sharing Platform",
+    description: `RecipeHub is a platform where food enthusiasts can create, share, discover, and manage recipes.
 Users can publish their own recipes, browse recipes shared by others, save favorite recipes, and interact with the community.
 The platform creates a centralized space for recipe sharing and culinary inspiration`,
 };
 
-export default function RootLayout({ children }) {
-  return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${plusJakarta.className} ${inter.variable} h-full antialiased`}
-      suppressHydrationWarning
-    >
-      <body className="min-h-full flex flex-col">
-        <Script
-          id="theme-initializer"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var savedTheme = localStorage.getItem('theme');
-                  if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                    document.documentElement.classList.add('dark');
-                  } else {
-                    document.documentElement.classList.remove('dark');
-                  }
-                } catch (e) {}
-              })();
-            `
-          }}
-        />
-        <Providers>
-          <Navbar/>
-          {children}
-          <Footer/>
-        </Providers>
-        <Toaster  position="top-center"/>
-      </body>
-    </html>
-  );
+export default function GeneralLayout({ children }) {
+    return (
+        <>
+            <Navbar />
+            {children}
+            <Footer />
+        </>
+    );
 }
-
