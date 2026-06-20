@@ -1,4 +1,5 @@
 export const userNavItems = [
+    // { label: "Home", href: "/", icon: "House" },
     { label: "Overview", href: "/dashboard/user", icon: "LayoutDashboard" },
     { label: "My Recipe", href: "/dashboard/user/my-recipes", icon: "NotebookText" },
     { label: "Add Recipe", href: "/dashboard/user/add-recipe", icon: "CirclePlus" },
@@ -12,6 +13,7 @@ export const userNavItems = [
 ];
 
 export const adminNavItems = [
+    // { label: "Home", href: "/", icon: "House" },
     { label: "Overview", href: "/dashboard/admin", icon: "LayoutDashboard" },
     { label: "Users", href: "/dashboard/admin/users", icon: "Users" },
     { label: "Recipes", href: "/dashboard/admin/recipes", icon: "UtensilsCrossed" },

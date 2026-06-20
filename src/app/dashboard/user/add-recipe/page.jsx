@@ -19,6 +19,7 @@ import {
     Utensils,
 } from "lucide-react";
 
+
 const CATEGORIES = ["Breakfast", "Lunch", "Dinner", "Dessert", "Main Course", "Snacks", "Drinks"];
 const DIFFICULTY_LEVELS = ["Easy", "Medium", "Hard", "Expert"];
 const CUISINE_TYPES = ["International", "Italian", "Mexican", "Indian", "Chinese", "Japanese", "American", "French", "Thai", "Mediterranean"];
@@ -66,16 +67,30 @@ export default function AddRecipePage() {
             return;
         }
         startTransition(async () => {
-            const result = await createRecipeAction({
-                ...form,
-                ingredients: filteredIngredients,
-                instructions: filteredInstructions,
-            });
-            if (result.success) {
-                toast.success("Recipe published successfully!");
-                router.push("/dashboard/user/my-recipes");
-            } else {
-                toast.error(result.error || "Failed to create recipe.");
+            try {
+                const { data } = await authClient.token()
+                // console.log(data)
+                const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/recipes`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${data?.token}`,
+                    },
+                    body: JSON.stringify({
+                        ...form,
+                        ingredients: filteredIngredients,
+                        instructions: filteredInstructions,
+                    }),
+                });
+                const result = await response.json();
+                if (result.success || response.ok) {
+                    toast.success("Recipe published successfully!");
+                    router.push("/dashboard/user/my-recipes");
+                } else {
+                    toast.error(result.error || "Failed to create recipe.");
+                }
+            } catch (error) {
+                toast.error(error.message || "An error occurred while creating the recipe.");
             }
         });
     };
@@ -89,7 +104,7 @@ export default function AddRecipePage() {
             logoSrc="/RecipeHub Logo.png"
             brandName="RecipeHub"
         >
-            <form onSubmit={handleSubmit} className="mx-auto max-w-3xl space-y-6">
+            <form onSubmit={handleSubmit} className="mx-auto max-w-6xl space-y-6">
 
                 {/* Basic Info Card */}
                 <div className="rounded-2xl border border-slate-200/70 bg-white/90 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
@@ -273,7 +288,7 @@ export default function AddRecipePage() {
                                     onChange={(e) => updateInstruction(i, e.target.value)}
                                     placeholder={`Step ${i + 1}: Describe what to do...`}
                                     rows={2}
-                                    className="flex-1 rounded border-2 border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none resize-none transition focus:border-orange-400 dark:border-white/25 dark:bg-slate-900 dark:text-slate-100"
+                                    className="flex-1 rounded border-2 border-slate-100 bg-white px-3 py-2 text-sm text-slate-800 outline-none resize-none transition focus:border-orange-400 dark:border-white/25 dark:bg-slate-900 dark:text-slate-400"
                                 />
                                 {instructions.length > 1 && (
                                     <button

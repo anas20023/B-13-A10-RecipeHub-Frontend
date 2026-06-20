@@ -22,7 +22,7 @@ function StatCard({ title, value, icon: Icon, hint, gradient }) {
     return (
         <Card className="relative overflow-hidden border border-slate-200/70 bg-white/90 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
             <div className="absolute inset-0 opacity-5">
-                <div className={`absolute -right-4 -top-4 h-24 w-24 rounded-full ${gradient}`} />
+                <div className={`absolute -right-4 -top-4 h-24 w-24 rounded ${gradient}`} />
             </div>
             <div className="relative p-5">
                 <div className="flex items-start justify-between gap-3">

@@ -34,7 +34,7 @@ export default function DashboardShell({
 
                         <div className="text-sm text-slate-500 dark:text-slate-400">
                             Signed in as{" "}
-                            <span className="font-medium text-slate-900 dark:text-slate-100">
+                            <span className="font-medium text-slate-900 dark:text-slate-400">
                                 {user?.name}
                             </span>
                         </div>

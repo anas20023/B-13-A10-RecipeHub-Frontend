@@ -1,11 +1,14 @@
+/* eslint-disable react-hooks/static-components */
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Separator } from "@heroui/react";
+import { Separator, Button } from "@heroui/react";
 import ProfileSummary from "./ProfileSummary";
 import {
+    Home,
     LayoutDashboard,
     NotebookText,
     CirclePlus,
@@ -15,9 +18,12 @@ import {
     ShieldCheck,
     Users,
     Settings,
+    Menu,
+    X,
 } from "lucide-react";
 
 const iconMap = {
+    Home,
     LayoutDashboard,
     NotebookText,
     CirclePlus,
@@ -41,11 +47,16 @@ export default function SidebarShell({
     brandHref = "/",
 }) {
     const pathname = usePathname();
+    const [isOpen, setIsOpen] = useState(false);
 
-    return (
-        <aside className="border-b border-slate-200 bg-white/95 backdrop-blur dark:border-slate-800 dark:bg-slate-950/95 lg:sticky lg:top-0 lg:h-screen lg:w-72 lg:border-b-0 lg:border-r">
-            <div className="flex h-full flex-col p-4 sm:p-5">
-                <Link href={brandHref} className="flex items-center gap-3">
+    const SidebarContent = () => (
+        <>
+            <div className="flex items-center justify-between">
+                <Link
+                    href={brandHref}
+                    className="flex items-center gap-3"
+                    onClick={() => setIsOpen(false)}
+                >
                     <Image
                         src={logoSrc}
                         alt={brandName}
@@ -54,51 +65,122 @@ export default function SidebarShell({
                         className="h-11 w-11 rounded-xl object-contain"
                         priority
                     />
-                    <div className="min-w-0">
-                        <p className="truncate text-lg font-bold text-slate-900 dark:text-slate-400">
+
+                    <div>
+                        <p className="text-lg font-bold text-slate-900 dark:text-slate-400">
                             {brandName}
                         </p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">
+
+                        <p className="text-xs text-slate-500">
                             Dashboard
                         </p>
                     </div>
                 </Link>
 
-                <div className="mt-4">
-                    <ProfileSummary user={user} compact />
-                </div>
-
-                <Separator className="my-5 bg-slate-200/80 dark:bg-slate-800" />
-
-                <nav className="space-y-1">
-                    {navItems.map((item) => {
-                        const Icon = iconMap[item.icon] || LayoutDashboard;
-                        const active =
-                            pathname === item.href ||
-                            (item.href !== "/dashboard/user" && item.href !== "/dashboard/admin" && pathname?.startsWith(item.href));
-
-                        return (
-                            <Link
-                                key={item.href}
-                                href={item.href}
-                                className={cn(
-                                    "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
-                                    active
-                                        ? "bg-orange-500 text-white shadow-sm shadow-orange-500/20"
-                                        : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
-                                )}
-                            >
-                                <Icon className="h-4 w-4 shrink-0" />
-                                <span>{item.label}</span>
-                            </Link>
-                        );
-                    })}
-                </nav>
-
-                <div className="mt-auto pt-5 text-xs text-slate-500 dark:text-slate-400">
-                    {user?.isPremium ? "Premium account" : "Free account"}
-                </div>
+                {/* Mobile Close Button */}
+                <Button
+                    isIconOnly
+                    variant="light"
+                    className="lg:hidden"
+                    onPress={() => setIsOpen(false)}
+                >
+                    <X size={20} />
+                </Button>
             </div>
-        </aside>
+
+            <div className="mt-4">
+                <ProfileSummary user={user} compact />
+            </div>
+
+            <Separator className="my-5 bg-slate-200 dark:bg-slate-800" />
+
+            <nav className="space-y-1">
+                {navItems.map((item) => {
+                    const Icon =
+                        iconMap[item.icon] || Home;
+
+                    const active =
+                        pathname === item.href 
+                        // (item.href !== "/dashboard/user" &&
+                        //     item.href !== "/dashboard/admin" &&
+                        //     pathname.startsWith(item.href));
+
+                    return (
+                        <Link
+                            key={item.href}
+                            href={item.href}
+                            onClick={() => setIsOpen(false)}
+                            className={cn(
+                                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all",
+                                active
+                                    ? "bg-orange-500 text-white shadow-sm shadow-orange-500/20"
+                                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-900"
+                            )}
+                        >
+                            <Icon className="h-4 w-4 shrink-0" />
+                            <span>{item.label}</span>
+                        </Link>
+                    );
+                })}
+            </nav>
+
+            <div className="mt-auto pt-5 text-xs text-slate-500 dark:text-slate-400">
+                {user?.isPremium
+                    ? "Premium account"
+                    : "Free account"}
+            </div>
+        </>
+    );
+
+    return (
+        <>
+            {/* Mobile Header */}
+            <div className="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-900 lg:hidden">
+                <Link
+                    href={brandHref}
+                    className="flex items-center gap-2"
+                >
+                    <Image
+                        src={logoSrc}
+                        alt={brandName}
+                        width={36}
+                        height={36}
+                        className="rounded-lg"
+                    />
+
+                    <span className="font-semibold">
+                        {brandName}
+                    </span>
+                </Link>
+
+                <Button
+                    isIconOnly
+                    variant="light"
+                    onPress={() => setIsOpen(true)}
+                >
+                    <Menu size={22} />
+                </Button>
+            </div>
+
+            {/* Mobile Overlay */}
+            {isOpen && (
+                <div
+                    className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+                    onClick={() => setIsOpen(false)}
+                />
+            )}
+
+            {/* Sidebar */}
+            <aside
+                className={cn(
+                    "fixed left-0 top-0 z-50 flex h-screen w-72 flex-col border-r border-slate-200 bg-white p-5 transition-transform duration-300 dark:border-slate-800 dark:bg-slate-900 lg:sticky lg:translate-x-0",
+                    isOpen
+                        ? "translate-x-0"
+                        : "-translate-x-full lg:translate-x-0"
+                )}
+            >
+                <SidebarContent />
+            </aside>
+        </>
     );
 }
