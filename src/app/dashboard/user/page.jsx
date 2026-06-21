@@ -74,7 +74,7 @@ export default async function UserDashboardPage() {
 
     const [myRecipesCount, favoritedCount, purchasedCount] = await Promise.all([
         db.collection("recipes").countDocuments({ authorEmail: user.email }),
-        db.collection("recipes").countDocuments({ favoritedBy: user.email }),
+        db.collection("recipes").countDocuments({ favouritedBy: user.id }),
         db.collection("purchases").countDocuments({ buyerEmail: user.email }),
     ]);
 

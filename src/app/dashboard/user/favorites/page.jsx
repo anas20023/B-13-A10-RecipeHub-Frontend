@@ -18,7 +18,9 @@ export default async function FavoritesPage() {
     const db = await getDb();
     const recipes = await db
         .collection("recipes")
-        .find({ favoritedBy: user.email })
+        // favoritedBy is an array of user IDs (strings)
+        // match recipes where the current user's id is present in the array
+        .find({ favouritedBy: user.id })
         .sort({ updatedAt: -1 })
         .toArray();
 
