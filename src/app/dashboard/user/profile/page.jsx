@@ -4,10 +4,9 @@ import { redirect } from "next/navigation";
 import { getDb } from "@/app/lib/db";
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import { userNavItems } from "@/components/dashboard/nav-items";
-import { Card } from "@heroui/react";
 import { UserRound, Crown, BookOpenText, Heart, ShoppingBag, StarCheck } from "lucide-react";
-// import ProfileEditForm from "./ProfileEditForm";
 import Image from "next/image";
+import ProfileEditForm from "./ProfileEditForm";
 
 export default async function UserProfilePage() {
     const session = await auth.api.getSession({ headers: await headers() });
@@ -105,7 +104,10 @@ export default async function UserProfilePage() {
                 </div>
 
                 {/* Edit form card */}
-                {/* <ProfileEditForm user={serializedUser} /> */}
+                <ProfileEditForm
+                    key={`${serializedUser.email}-${serializedUser.name}-${serializedUser.image}`}
+                    user={serializedUser}
+                />
             </div>
         </DashboardShell>
     );
