@@ -90,7 +90,7 @@ export default async function UserProfilePage() {
                             {[
                                 { label: "Recipes", value: myRecipesCount, icon: BookOpenText, color: "text-orange-500" },
                                 { label: "Favorites", value: likesCount, icon: StarCheck, color: "text-rose-500" },
-                                { label: "Favorites", value: favouritedBy, icon: Heart, color: "text-rose-500" },
+                                { label: "Impressions", value: favouritedBy, icon: Heart, color: "text-rose-500" },
                                 { label: "Purchased", value: purchasedCount, icon: ShoppingBag, color: "text-blue-500" },
                             ].map(({ label, value, icon: Icon, color }) => (
                                 <div key={label} className="flex flex-col items-center gap-1 rounded-xl bg-slate-50 py-3 dark:bg-slate-900">

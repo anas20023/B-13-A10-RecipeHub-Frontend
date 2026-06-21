@@ -113,7 +113,7 @@ export default function ProfileEditForm({ user }) {
                             <Input
                                 id="profileEmail"
                                 value={user?.email || ""}
-                                isReadOnly
+                                readOnly
                                 className="rounded border-2 dark:border-white/25"
                             />
                         </div>
