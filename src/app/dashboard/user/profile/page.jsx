@@ -5,7 +5,7 @@ import { getDb } from "@/app/lib/db";
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import { userNavItems } from "@/components/dashboard/nav-items";
 import { Card } from "@heroui/react";
-import { UserRound, Crown, BookOpenText, Heart, ShoppingBag } from "lucide-react";
+import { UserRound, Crown, BookOpenText, Heart, ShoppingBag, StarCheck } from "lucide-react";
 // import ProfileEditForm from "./ProfileEditForm";
 import Image from "next/image";
 
@@ -15,11 +15,13 @@ export default async function UserProfilePage() {
     if (!user) redirect("/login");
 
     const db = await getDb();
-    const [myRecipesCount, favoritedCount, purchasedCount] = await Promise.all([
+    const [myRecipesCount, favouritedBy, likesCount, purchasedCount] = await Promise.all([
         db.collection("recipes").countDocuments({ authorEmail: user.email }),
-        db.collection("recipes").countDocuments({ favoritedBy: user.email }),
+        db.collection("recipes").countDocuments({ favouritedBy: user.id }),
+        db.collection("recipes").countDocuments({ likesCount: user.id }),
         db.collection("purchases").countDocuments({ buyerEmail: user.email }),
     ]);
+
 
     const serializedUser = {
         name: user.name || "",
@@ -38,9 +40,9 @@ export default async function UserProfilePage() {
             logoSrc="/RecipeHub Logo.png"
             brandName="RecipeHub"
         >
-            <div className="mx-auto max-w-2xl space-y-6">
+            <div className="mx-auto max-w-7xl space-y-6">
                 {/* Profile overview card */}
-                <Card className="overflow-hidden border border-slate-200/70 bg-white/90 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+                <div className="overflow-hidden border border-slate-200/70 bg-white/90 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
                     {/* Top gradient banner */}
                     <div className="h-24 bg-linear-to-r from-orange-500 to-amber-600" />
                     <div className="relative px-6 pb-6 pt-0">
@@ -88,10 +90,11 @@ export default async function UserProfilePage() {
                         <div className="mt-4 grid grid-cols-3 gap-3 border-t border-slate-100 pt-4 dark:border-slate-800">
                             {[
                                 { label: "Recipes", value: myRecipesCount, icon: BookOpenText, color: "text-orange-500" },
-                                { label: "Favorites", value: favoritedCount, icon: Heart, color: "text-rose-500" },
+                                { label: "Favorites", value: likesCount, icon: StarCheck, color: "text-rose-500" },
+                                { label: "Favorites", value: favouritedBy, icon: Heart, color: "text-rose-500" },
                                 { label: "Purchased", value: purchasedCount, icon: ShoppingBag, color: "text-blue-500" },
                             ].map(({ label, value, icon: Icon, color }) => (
-                                <div key={label} className="flex flex-col items-center gap-1 rounded-xl bg-slate-50 py-3 dark:bg-slate-950">
+                                <div key={label} className="flex flex-col items-center gap-1 rounded-xl bg-slate-50 py-3 dark:bg-slate-900">
                                     <Icon className={`h-5 w-5 ${color}`} />
                                     <span className="text-lg font-bold">{value}</span>
                                     <span className="text-xs text-slate-500 dark:text-slate-400">{label}</span>
@@ -99,7 +102,7 @@ export default async function UserProfilePage() {
                             ))}
                         </div>
                     </div>
-                </Card>
+                </div>
 
                 {/* Edit form card */}
                 {/* <ProfileEditForm user={serializedUser} /> */}
