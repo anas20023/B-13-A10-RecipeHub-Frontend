@@ -20,6 +20,9 @@ import {
     Sparkles,
 } from 'lucide-react'
 import { IoMdPricetag } from 'react-icons/io'
+import toast from 'react-hot-toast'
+import { useRouter } from 'next/navigation'
+import { authClient } from '@/app/lib/auth-client'
 
 function formatDaysAgo(dateValue) {
     if (!dateValue) return 'Unknown'
@@ -33,16 +36,18 @@ function formatDaysAgo(dateValue) {
     if (diffDays === 1) return '1 day ago'
     return `${diffDays} days ago`
 }
-
+// const { data } = await authClient.token();
 export default function RecipeDetailsClient({ recipe }) {
+    console.log(recipe)
     const [likesCount, setLikesCount] = useState(Number(recipe.likesCount) || 0)
     const [liked, setLiked] = useState(false)
     const [favorite, setFavorite] = useState(false)
     const [reportReason, setReportReason] = useState('Inaccurate recipe')
-
+    const { data: session, isPending, error } = authClient.useSession()
+    // console.log(session)
     const ingredients = recipe.ingredients || []
     const instructions = recipe.instructions || []
-
+    const router=useRouter()
     const updatedText = useMemo(
         () => formatDaysAgo(recipe.updatedAt),
         [recipe.updatedAt]
@@ -56,9 +61,39 @@ export default function RecipeDetailsClient({ recipe }) {
         })
     }
 
-    const handleFavorite = () => {
+    const handleFavorite = async () => {
+        if (!session?.user?.id) {
+            toast.error("Please log in to favorite recipes");
+            return;
+        }
+
+        const { data } = await authClient.token();
+        try {
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/recipes/favourite/${recipe._id}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${data?.token}`
+                    },
+                }
+            );
+            // console.log(response)
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result?.message || "Failed to Recipe added to Favourite successfully ");
+            }
+            router.refresh()
+            toast.success(result?.message || "Recipe added to Favourite successfully !")
+
+        } catch (error) {
+
+        }
         setFavorite((prev) => !prev)
     }
+
+    const isFavorited = recipe.favouritedBy?.includes(session?.user?.id)
 
     return (
         <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
@@ -230,12 +265,13 @@ export default function RecipeDetailsClient({ recipe }) {
 
                             <Button
                                 onPress={handleFavorite}
-                                className={`rounded-lg px-5 shadow-none transition-colors ${favorite
+                                isDisabled={isFavorited}
+                                className={`rounded-lg px-5 shadow-none transition-colors ${isFavorited
                                     ? 'bg-amber-500 text-white hover:bg-amber-600'
                                     : 'bg-zinc-100 text-slate-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-slate-200 dark:hover:bg-zinc-700'
                                     }`}
                             >
-                                <Star size={16} fill={favorite ? 'currentColor' : 'none'} />
+                                <Star size={16} fill={isFavorited ? 'currentColor' : 'none'} />
                                 <span className="ml-1.5">Favorite</span>
                             </Button>
 
