@@ -38,7 +38,7 @@ function formatDaysAgo(dateValue) {
 }
 // const { data } = await authClient.token();
 export default function RecipeDetailsClient({ recipe }) {
-    console.log(recipe)
+    // console.log(recipe)
     const [likesCount, setLikesCount] = useState(Number(recipe.likesCount) || 0)
     const [liked, setLiked] = useState(false)
     const [favorite, setFavorite] = useState(false)
