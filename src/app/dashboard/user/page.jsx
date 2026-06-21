@@ -13,6 +13,7 @@ import {
     Star,
     ChefHat,
     Flame,
+    StarCheck,
 } from "lucide-react";
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import { userNavItems } from "@/components/dashboard/nav-items";
@@ -33,7 +34,7 @@ function StatCard({ title, value, isPremium = true, icon: Icon, hint, gradient }
                         <h3 className="mt-1.5 text-3xl font-extrabold tracking-tight">{value}</h3>
                         {isMyRecipesNonPremium ? (
                             <div className="mt-2 space-y-1.5">
-                                <p className="text-xs font-bold text-red-600 dark:text-red-400">⚠️ You left {recipesLeft} recipes to upload. <br /> Update to premium subscription</p>
+                                <p className="text-xs font-bold text-red-600 dark:text-red-400">⚠️ You left {recipesLeft} recipes to upload.</p>
                                 <Link href="/dashboard/user/subscription" className="text-xs font-medium text-orange-600 hover:underline dark:text-orange-400">
                                     Purchase Subscription →
                                 </Link>
@@ -140,7 +141,7 @@ export default async function UserDashboardPage() {
             </div>
 
             {/* Stat cards */}
-            <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <StatCard
                     title="My Recipes"
                     value={myRecipesCount}
@@ -152,9 +153,16 @@ export default async function UserDashboardPage() {
                 <StatCard
                     title="Favorites"
                     value={favoritedCount}
-                    icon={Heart}
+                    icon={StarCheck}
                     hint="Recipes you saved"
                     gradient="bg-rose-500"
+                />
+                <StatCard
+                    title="Impressions"
+                    value={favoritedCount}
+                    icon={Heart}
+                    hint="Impressions you gain"
+                    gradient="bg-red-500"
                 />
                 <StatCard
                     title="Purchased"
