@@ -38,32 +38,51 @@ function formatDaysAgo(dateValue) {
 }
 // const { data } = await authClient.token();
 export default function RecipeDetailsClient({ recipe }) {
-    // console.log(recipe)
-    const [likesCount, setLikesCount] = useState(Number(recipe.likesCount) || 0)
-    const [liked, setLiked] = useState(false)
-    const [favorite, setFavorite] = useState(false)
+    console.log(recipe)
     const [reportReason, setReportReason] = useState('Inaccurate recipe')
-    const { data: session, isPending, error } = authClient.useSession()
+    const { data: session } = authClient.useSession()
     // console.log(session)
     const ingredients = recipe.ingredients || []
     const instructions = recipe.instructions || []
-    const router=useRouter()
+    const router = useRouter()
     const updatedText = useMemo(
         () => formatDaysAgo(recipe.updatedAt),
         [recipe.updatedAt]
     )
 
-    const handleLike = () => {
-        setLiked((prev) => {
-            const next = !prev
-            setLikesCount((count) => (next ? count + 1 : Math.max(0, count - 1)))
-            return next
-        })
+    const handleLike = async () => {
+        if (!session?.user?.id) {
+            toast.error("Please log in to love recipes");
+            return;
+        }
+        const { data } = await authClient.token();
+        try {
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/recipes/like/${recipe._id}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${data?.token}`
+                    },
+                }
+            );
+            // console.log(response)
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result?.message || "Failed to Like the Recipe ");
+            }
+            router.refresh()
+            toast.success(result?.message || "Recipe Loved !")
+
+        } catch (error) {
+            toast.error(error.message || "Failed to Like the Favourite !")
+        }
     }
 
     const handleFavorite = async () => {
         if (!session?.user?.id) {
-            toast.error("Please log in to favorite recipes");
+            toast.error("Please log in to add favorite recipes");
             return;
         }
 
@@ -88,12 +107,12 @@ export default function RecipeDetailsClient({ recipe }) {
             toast.success(result?.message || "Recipe added to Favourite successfully !")
 
         } catch (error) {
-
+            toast.error(error.message || "Failed to Add to Favourite !")
         }
-        setFavorite((prev) => !prev)
     }
 
     const isFavorited = recipe.favouritedBy?.includes(session?.user?.id)
+    const isLiked = recipe.likesCount?.includes(session?.user?.id)
 
     return (
         <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
@@ -254,13 +273,13 @@ export default function RecipeDetailsClient({ recipe }) {
                         <div className="flex flex-wrap gap-3">
                             <Button
                                 onPress={handleLike}
-                                className={`rounded-lg px-5 shadow-none transition-colors ${liked
+                                className={`rounded-lg px-5 shadow-none transition-colors ${isLiked
                                     ? 'bg-rose-500 text-white hover:bg-rose-600'
                                     : 'bg-zinc-100 text-slate-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-slate-200 dark:hover:bg-zinc-700'
                                     }`}
                             >
-                                <Heart size={16} fill={liked ? 'currentColor' : 'none'} />
-                                <span className="ml-1.5">{likesCount}</span>
+                                <Heart size={16} fill={isLiked ? 'currentColor' : 'none'} />
+                                <span className="ml-1.5">{recipe.likesCount.length}</span>
                             </Button>
 
                             <Button

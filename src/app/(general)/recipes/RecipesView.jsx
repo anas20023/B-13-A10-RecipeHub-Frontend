@@ -22,7 +22,7 @@ const categories = [
 
 export default function RecipesClient({ recipes = [], pagination = {} }) {
     const router = useRouter()
-    const pathname = usePathname()
+    const pathname = usePathname() 
     const searchParams = useSearchParams()
 
     const currentCategory = searchParams.get('category') || 'All'
@@ -372,7 +372,7 @@ export default function RecipesClient({ recipes = [], pagination = {} }) {
                                         <div className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
                                             <Heart size={16} />
                                             <span className="text-sm">
-                                                {recipe.likesCount}
+                                                {recipe.likesCount.length}
                                             </span>
                                         </div>
                                         <div className="flex items-center font-bold gap-1 text-slate-500 dark:text-slate-400">

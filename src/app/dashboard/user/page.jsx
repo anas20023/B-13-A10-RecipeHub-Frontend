@@ -73,9 +73,10 @@ export default async function UserDashboardPage() {
     // console.log(user)
     const db = await getDb();
 
-    const [myRecipesCount, favoritedCount, purchasedCount] = await Promise.all([
+    const [myRecipesCount, favoritedCount,likesCount, purchasedCount] = await Promise.all([
         db.collection("recipes").countDocuments({ authorEmail: user.email }),
         db.collection("recipes").countDocuments({ favouritedBy: user.id }),
+        db.collection("recipes").countDocuments({ likesCount: user.id }),
         db.collection("purchases").countDocuments({ buyerEmail: user.email }),
     ]);
 
@@ -126,7 +127,7 @@ export default async function UserDashboardPage() {
                 <div className="flex items-center justify-between gap-4">
                     <div>
                         <h2 className="text-xl font-bold">Welcome back, {user.name?.split(" ")[0]}! 👋</h2>
-                        <p className="mt-1 text-sm text-slate-800">
+                        <p className="mt-1 text-sm text-slate-100">
                             {user.isPremium
                                 ? "You are a premium member. Enjoy unlimited recipes!"
                                 : "Upgrade to premium to access exclusive recipes."}
@@ -134,7 +135,7 @@ export default async function UserDashboardPage() {
                     </div>
                     <div className="hidden sm:block">
                         <div className="rounded-xl bg-white/20 p-3 backdrop-blur-sm">
-                            <Flame className="h-8 w-8 text-orange-500" />
+                            <Flame className="h-8 w-8 text-white dark:text-orange-500" />
                         </div>
                     </div>
                 </div>
@@ -159,7 +160,7 @@ export default async function UserDashboardPage() {
                 />
                 <StatCard
                     title="Impressions"
-                    value={favoritedCount}
+                    value={likesCount}
                     icon={Heart}
                     hint="Impressions you gain"
                     gradient="bg-red-500"
