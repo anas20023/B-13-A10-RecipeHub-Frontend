@@ -61,10 +61,11 @@ export const auth = betterAuth({
         },
     },
     session: {
+        expiresIn: 60 * 60 * 24 * 7, // 7 days
         cookieCache: {
-            enabled: true,
-            maxAge:  5 // Cache duration in seconds (5 minutes)
-        }
+            enabled: false, // Disables temporary memory/cookie caching mechanisms
+        },
+        strategy: "jwt", // Forces standard cryptographic JWT sessions
     },
     plugins: [
         jwt(),

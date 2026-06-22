@@ -8,7 +8,7 @@ export const userNavItems = [
         href: "/dashboard/user/purchased-recipes",
         icon: "ShoppingBag",
     },
-    { label: "Favorite", href: "/dashboard/user/favorites", icon: "Heart" },
+    { label: "Favorite", href: "/dashboard/user/favorites", icon: "StarCheck" },
     { label: "Profile", href: "/dashboard/user/profile", icon: "UserRound" },
 ];
 

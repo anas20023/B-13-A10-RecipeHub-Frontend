@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useTheme } from "@/context/ThemeContext";
 import { Avatar } from "@heroui/react";
-import { Moon, Sun } from "lucide-react";
+import { Crown, Moon, Sun } from "lucide-react";
 
 function getInitials(name = "") {
     return name
@@ -30,12 +30,6 @@ export default function ProfileSummary({
                         <Avatar.Image src={user.image || ""} alt={user.name || "User"} />
                         <Avatar.Fallback>{getInitials(user.name)}</Avatar.Fallback>
                     </Avatar>
-                    {/* {serializedUser.isPremium && (
-                        <div className="absolute -right-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-amber-500 shadow-md">
-                            <Crow className="h-3.5 w-3.5 text-white" />
-                        </div>
-                    )} */}
-
                     <div className="min-w-0 flex flex-col">
                         <div>
                             <h3 className="truncate text-base font-semibold text-slate-900 dark:text-slate-400">
@@ -46,9 +40,14 @@ export default function ProfileSummary({
                             </p>
                         </div>
 
-                        <div className="mt-2 flex items-center gap-2">
-                            <div className="inline-flex items-center rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-xs font-semibold text-orange-700 dark:border-orange-900/60 dark:bg-orange-950/40 dark:text-orange-300">
-                                {user.role || "user"}
+                        <div className="mt-2 flex flex-wrap items-center gap-2">
+                            <div className="inline-flex items-center gap-1.5 rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-xs font-semibold capitalize text-orange-700 dark:border-orange-900/60 dark:bg-orange-950/40 dark:text-orange-300">
+                                {user.isPremium && (
+                                    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-amber-500 shadow-sm ring-1 ring-amber-400/40">
+                                        <Crown className="h-3 w-3 text-white" />
+                                    </span>
+                                )}
+                                <span>{user.role || "user"}</span>
                             </div>
                             <button
                                 onClick={toggleTheme}

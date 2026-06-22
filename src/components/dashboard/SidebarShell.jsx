@@ -20,6 +20,7 @@ import {
     Settings,
     Menu,
     X,
+    StarCheck,
 } from "lucide-react";
 
 const iconMap = {
@@ -33,6 +34,7 @@ const iconMap = {
     ShieldCheck,
     Users,
     Settings,
+    StarCheck
 };
 
 function cn(...classes) {
