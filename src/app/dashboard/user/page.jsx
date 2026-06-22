@@ -35,9 +35,11 @@ function StatCard({ title, value, isPremium = true, icon: Icon, hint, gradient }
                         {isMyRecipesNonPremium ? (
                             <div className="mt-2 space-y-1.5">
                                 <p className="text-xs font-bold text-red-600 dark:text-red-400">⚠️ You left {recipesLeft} recipes to upload.</p>
-                                <Link href="/dashboard/user/subscription" className="text-xs font-medium text-orange-600 hover:underline dark:text-orange-400">
-                                    Purchase Subscription →
-                                </Link>
+                                <form action="/api/checkout_sessions" method="POST">
+                                    <button type="submit" className="text-xs cursor-pointer font-medium text-orange-600 hover:underline dark:text-orange-400">
+                                        Purchase Subscription →
+                                    </button>
+                                </form>
                             </div>
                         ) : (
                             <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">{hint}</p>
