@@ -273,6 +273,7 @@ export default function RecipeDetailsClient({ recipe }) {
                         <div className="flex flex-wrap gap-3">
                             <Button
                                 onPress={handleLike}
+                                isDisabled={isLiked}
                                 className={`rounded-lg px-5 shadow-none transition-colors ${isLiked
                                     ? 'bg-rose-500 text-white hover:bg-rose-600'
                                     : 'bg-zinc-100 text-slate-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-slate-200 dark:hover:bg-zinc-700'

@@ -160,7 +160,7 @@ export default function FeaturedRecipesClient({ recipes }) {
                                 <div className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
                                     <Heart size={16} />
                                     <span className="text-sm">
-                                        {recipe.likesCount}
+                                        {recipe.likesCount.length}
                                     </span>
                                 </div>
                             </div>

@@ -107,7 +107,7 @@ export default function PopularRecipesClient({ recipes }) {
                                 />
 
                                 <span className="font-semibold text-slate-900 dark:text-slate-100">
-                                    {recipe.likesCount}
+                                    {recipe.likesCount.length}
                                 </span>
 
                                 <span className="text-sm text-slate-500 dark:text-slate-400">

@@ -114,7 +114,7 @@ export default async function FavoritesPage() {
                                         >
                                             View <ArrowRight className="h-3 w-3" />
                                         </Link>
-                                        {/* <FavoriteToggle recipeId={recipe._id} /> */}
+                                        <FavoriteToggle recipeId={recipe._id} />
                                     </div>
                                 </div>
                             </Card>

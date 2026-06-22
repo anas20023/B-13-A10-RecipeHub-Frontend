@@ -7,12 +7,13 @@ async function getFeaturedRecipes() {
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/recipes?isFeatured=true&limit=6`
         )
-
+        // console.log(res)
         if (!res.ok) {
             throw new Error('Failed to fetch recipes')
         }
 
         const data = await res.json()
+        // console.log(data)
         return data?.data || data?.recipes || []
     } catch (error) {
         console.error(error)
