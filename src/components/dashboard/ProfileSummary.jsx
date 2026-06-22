@@ -30,6 +30,11 @@ export default function ProfileSummary({
                         <Avatar.Image src={user.image || ""} alt={user.name || "User"} />
                         <Avatar.Fallback>{getInitials(user.name)}</Avatar.Fallback>
                     </Avatar>
+                    {/* {serializedUser.isPremium && (
+                        <div className="absolute -right-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-amber-500 shadow-md">
+                            <Crow className="h-3.5 w-3.5 text-white" />
+                        </div>
+                    )} */}
 
                     <div className="min-w-0 flex flex-col">
                         <div>
