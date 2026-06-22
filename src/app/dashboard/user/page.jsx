@@ -79,7 +79,7 @@ export default async function UserDashboardPage() {
         db.collection("recipes").countDocuments({ authorEmail: user.email }),
         db.collection("recipes").countDocuments({ favouritedBy: user.id }),
         db.collection("recipes").countDocuments({ likesCount: user.id }),
-        db.collection("purchases").countDocuments({ buyerEmail: user.email }),
+        db.collection("payments").countDocuments({ userEmail: user.email }),
     ]);
 
     const recentRecipes = await db
@@ -90,8 +90,8 @@ export default async function UserDashboardPage() {
         .toArray();
 
     const recentPurchases = await db
-        .collection("purchases")
-        .find({ buyerEmail: user.email })
+        .collection("payments")
+        .find({ userEmail: user.email })
         .sort({ purchasedAt: -1 })
         .limit(2)
         .toArray();

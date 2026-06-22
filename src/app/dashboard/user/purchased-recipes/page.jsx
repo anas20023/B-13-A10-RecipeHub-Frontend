@@ -16,8 +16,8 @@ export default async function PurchasedRecipesPage() {
 
     const db = await getDb();
     const purchases = await db
-        .collection("purchases")
-        .find({ buyerEmail: user.email })
+        .collection("payments")
+        .find({ userEmail: user.email })
         .sort({ purchasedAt: -1 })
         .toArray();
 
@@ -27,7 +27,7 @@ export default async function PurchasedRecipesPage() {
         recipeId: p.recipeId?.toString(),
         purchasedAt: p.purchasedAt ? p.purchasedAt.toISOString() : null,
     }));
-
+    console.log(purchases)
     return (
         <DashboardShell
             user={user}
