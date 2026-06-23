@@ -35,6 +35,7 @@ export default async function Success({ searchParams }) {
       const payload = {
         userEmail: customer_details?.email,
         userId: metadata?.userId,
+        title: metadata?.title,
         amount: metadata?.amount,
         recipeId: metadata?.recipeId || "",
         transactionId: metadata?.transactionId,

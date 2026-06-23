@@ -14,6 +14,7 @@ import {
     ChefHat,
     Flame,
     StarCheck,
+    Crown,
 } from "lucide-react";
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import { userNavItems } from "@/components/dashboard/nav-items";
@@ -78,7 +79,7 @@ export default async function UserDashboardPage() {
     const [myRecipesCount, favoritedCount,likesCount, purchasedCount] = await Promise.all([
         db.collection("recipes").countDocuments({ authorEmail: user.email }),
         db.collection("recipes").countDocuments({ favouritedBy: user.id }),
-        db.collection("recipes").countDocuments({ likesCount: user.id }),
+        db.collection("recipes").countDocuments({ authorId: user.id }),
         db.collection("payments").countDocuments({ userEmail: user.email }),
     ]);
 
@@ -104,9 +105,9 @@ export default async function UserDashboardPage() {
             iconBg: "bg-orange-100 text-orange-600 dark:bg-orange-950/40 dark:text-orange-400",
         })),
         ...recentPurchases.map((p) => ({
-            text: `Purchased "${p.recipeName}"`,
-            time: p.purchasedAt ? new Date(p.purchasedAt).toLocaleDateString() : "Recently",
-            icon: ShoppingBag,
+            text:  p.paymentType=='subscription'? `Subscribed Pro Plan` :`Purchased "${p.recipeName}"`,
+            time: p.paidAt ? new Date(p.paidAt).toLocaleDateString() : "Recently",
+            icon: p.paymentType=='subscription'? Crown:ShoppingBag,
             iconBg: "bg-blue-100 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400",
         })),
     ].slice(0, 5);
@@ -136,8 +137,8 @@ export default async function UserDashboardPage() {
                         </p>
                     </div>
                     <div className="hidden sm:block">
-                        <div className="rounded-xl bg-white/20 p-3 backdrop-blur-sm">
-                            <Flame className="h-8 w-8 text-white dark:text-orange-500" />
+                        <div className="rounded-xl bg-white p-3 backdrop-blur-sm">
+                            <Flame className="h-8 w-8 text-orange-500" />
                         </div>
                     </div>
                 </div>

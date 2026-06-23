@@ -29,6 +29,7 @@ export async function POST() {
             ],
             mode: 'subscription',
             metadata: {
+                title:"Recipe Product", 
                 transactionId,
                 userId: userSession?.user.id,
                 amount:99.99,
