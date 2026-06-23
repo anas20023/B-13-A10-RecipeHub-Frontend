@@ -22,7 +22,7 @@ const categories = [
 
 export default function RecipesClient({ recipes = [], pagination = {} }) {
     const router = useRouter()
-    const pathname = usePathname() 
+    const pathname = usePathname()
     const searchParams = useSearchParams()
 
     const currentCategory = searchParams.get('category') || 'All'
@@ -259,9 +259,10 @@ export default function RecipesClient({ recipes = [], pagination = {} }) {
 
                                 <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
 
-                                <div className="absolute left-4 top-4">
-                                    <span
-                                        className="
+                                {recipe.isFeatured &&
+                                    <div className="absolute left-4 top-4">
+                                        <span
+                                            className="
                                                 rounded-full
                                                 bg-orange-500
                                                 px-3 py-1
@@ -271,11 +272,12 @@ export default function RecipesClient({ recipes = [], pagination = {} }) {
                                                 shadow-lg
                                                 shadow-orange-500/30
                                                 "
-                                    >
-                                        Featured
-                                    </span>
-                                </div>
+                                        >
+                                            Featured
+                                        </span>
+                                    </div>
 
+                                }
                                 <div
                                     className="
                                             absolute bottom-4 left-4

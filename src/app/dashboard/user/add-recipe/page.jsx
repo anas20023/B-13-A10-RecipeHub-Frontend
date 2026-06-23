@@ -18,7 +18,6 @@ import {
     Utensils,
 } from "lucide-react";
 
-
 const CATEGORIES = ["Breakfast", "Lunch", "Dinner", "Dessert", "Main Course", "Snacks", "Drinks"];
 const DIFFICULTY_LEVELS = ["Easy", "Medium", "Hard", "Expert"];
 const CUISINE_TYPES = ["International", "Italian", "Mexican", "Indian", "Chinese", "Japanese", "American", "French", "Thai", "Mediterranean"];
@@ -27,9 +26,11 @@ export default function AddRecipePage() {
     const router = useRouter();
     const { data: session } = authClient.useSession();
     const user = session?.user;
-    if(!user?.isPremium && user?.uploaded>=2){
-        router.push('/dashboard/user')
+
+    if (!user?.isPremium && user?.uploaded >= 2) {
+        router.push("/dashboard/user");
     }
+
     const [isPending, startTransition] = useTransition();
 
     const [form, setForm] = useState({
@@ -43,6 +44,7 @@ export default function AddRecipePage() {
     });
     const [ingredients, setIngredients] = useState([""]);
     const [instructions, setInstructions] = useState([""]);
+    const [imageFile, setImageFile] = useState(null);
 
     const update = (field, val) => setForm((p) => ({ ...p, [field]: val }));
 
@@ -56,22 +58,58 @@ export default function AddRecipePage() {
     const updateInstruction = (i, val) =>
         setInstructions((p) => p.map((item, idx) => (idx === i ? val : item)));
 
+    const handleImageChange = (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        if (file.size > 1024 * 1024) {
+            toast.error("Image must be less than 1 MB");
+            e.target.value = "";
+            return;
+        }
+        setImageFile(file);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+
         if (!user) {
             toast.error("You must be logged in.");
             return;
         }
+
         const filteredIngredients = ingredients.filter((i) => i.trim());
         const filteredInstructions = instructions.filter((s) => s.trim());
+
         if (!filteredIngredients.length || !filteredInstructions.length) {
             toast.error("Please add at least one ingredient and one instruction step.");
             return;
         }
+
         startTransition(async () => {
             try {
-                const { data } = await authClient.token()
-                // console.log(data)
+                // Step 1: Upload image if one was selected
+                let imageUrl = "";
+                if (imageFile) {
+                    const formData = new FormData();
+                    formData.append("image", imageFile);
+
+                    const imgRes = await fetch(
+                        `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMAGEBB}`,
+                        { method: "POST", body: formData }
+                    );
+                    const imgResult = await imgRes.json();
+
+                    if (!imgResult.success) {
+                        toast.error("Failed to upload image. Please try again.");
+                        return;
+                    }
+
+                    imageUrl = imgResult.data.url;
+                }
+
+                // Step 2: Submit recipe with image URL
+                const { data } = await authClient.token();
+
                 const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/recipes`, {
                     method: "POST",
                     headers: {
@@ -80,11 +118,14 @@ export default function AddRecipePage() {
                     },
                     body: JSON.stringify({
                         ...form,
+                        recipeImage: imageUrl,
                         ingredients: filteredIngredients,
                         instructions: filteredInstructions,
                     }),
                 });
+
                 const result = await response.json();
+
                 if (result.success || response.ok) {
                     toast.success("Recipe published successfully!");
                     router.push("/dashboard/user/my-recipes");
@@ -132,16 +173,20 @@ export default function AddRecipePage() {
                         <div className="sm:col-span-2 flex flex-col gap-1.5">
                             <Label htmlFor="recipeImage">
                                 <ImageIcon className="inline h-3.5 w-3.5 mr-1 align-middle" />
-                                Image URL
+                                Recipe Image (Max 1 MB)
                             </Label>
                             <Input
                                 id="recipeImage"
-                                type="url"
-                                value={form.recipeImage}
-                                onChange={(e) => update("recipeImage", e.target.value)}
-                                placeholder="https://example.com/recipe-image.jpg"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
                                 className="rounded border-2 dark:border-white/25"
                             />
+                            {imageFile && (
+                                <p className="text-sm text-blue-600 dark:text-blue-400">
+                                    📎 {imageFile.name} — will upload on submit
+                                </p>
+                            )}
                         </div>
 
                         <div className="flex flex-col gap-1.5">
@@ -189,7 +234,6 @@ export default function AddRecipePage() {
                         <h2 className="text-base font-semibold">Classification</h2>
                     </div>
                     <div className="grid gap-4 sm:grid-cols-3">
-                        {/* Category */}
                         <div className="flex flex-col gap-1.5">
                             <Label htmlFor="category">Category</Label>
                             <select
@@ -202,7 +246,6 @@ export default function AddRecipePage() {
                             </select>
                         </div>
 
-                        {/* Difficulty */}
                         <div className="flex flex-col gap-1.5">
                             <Label htmlFor="difficultyLevel">Difficulty</Label>
                             <select
@@ -215,7 +258,6 @@ export default function AddRecipePage() {
                             </select>
                         </div>
 
-                        {/* Cuisine */}
                         <div className="flex flex-col gap-1.5">
                             <Label htmlFor="cuisineType">Cuisine Type</Label>
                             <select
@@ -319,7 +361,7 @@ export default function AddRecipePage() {
                     disabled={isPending}
                     className="w-full rounded-xl bg-linear-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-3 text-sm shadow-lg shadow-orange-500/20 transition-all duration-300 hover:-translate-y-0.5"
                 >
-                    {isPending ? "Publishing Recipe..." : "🍳 Publish Recipe"}
+                    {isPending ? "Publishing Recipe..." : "Publish Recipe"}
                 </button>
             </form>
         </DashboardShell>
