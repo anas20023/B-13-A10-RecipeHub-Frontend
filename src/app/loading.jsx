@@ -3,7 +3,7 @@ import { Spinner } from "@heroui/react";
 export default function Loading() {
     return (
         <div className="flex justify-center items-center min-h-screen">
-            <Spinner size="lg" color="accent" label="Loading..."  />
+            <Spinner size="lg" color="warning" label="Loading..."  />
         </div>
     );
 }
