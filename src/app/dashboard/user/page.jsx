@@ -76,10 +76,20 @@ export default async function UserDashboardPage() {
     // console.log(user)
     const db = await getDb();
 
-    const [myRecipesCount, favoritedCount,likesCount, purchasedCount] = await Promise.all([
+    const [myRecipesCount, favoritedCount, likesCount, purchasedCount] = await Promise.all([
         db.collection("recipes").countDocuments({ authorEmail: user.email }),
         db.collection("recipes").countDocuments({ favouritedBy: user.id }),
-        db.collection("recipes").countDocuments({ authorId: user.id }),
+        db.collection("recipes").aggregate([
+            { $match: { authorId: user.id } },
+            {
+                $project: {
+                    likesCount: {
+                        $cond: [{ $isArray: "$likesCount" }, { $size: "$likesCount" }, 0],
+                    },
+                },
+            },
+            { $group: { _id: null, total: { $sum: "$likesCount" } } },
+        ]).toArray().then((result) => result[0]?.total ?? 0),
         db.collection("payments").countDocuments({ userEmail: user.email }),
     ]);
 
