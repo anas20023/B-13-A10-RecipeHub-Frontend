@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server'
 import { headers } from 'next/headers'
 import { stripe } from '@/app/lib/stripe';
 import { auth } from '@/app/lib/auth';
-import { redirect } from 'next/navigation';
 
 export async function POST() {
     try {
@@ -13,7 +12,19 @@ export async function POST() {
         })
         // console.log(userSession?.user.email)
         if (!userSession) {
-            redirect('/login')
+            return NextResponse.redirect(new URL('/login', origin), 302)
+        }
+        if (userSession?.user?.isPremium) {
+            const errorParams = new URLSearchParams({
+                title: "Already a Pro Subscriber",
+                message: "You already have an active Pro subscription. No further action is required.",
+                dashboardRoute: "/dashboard",
+            });
+
+            return NextResponse.redirect(
+                new URL(`/subscription-error?${errorParams.toString()}`, origin),
+                302
+            );
         }
         const transactionId = crypto.randomUUID();
         // Create Checkout Sessions from body params.
@@ -29,12 +40,12 @@ export async function POST() {
             ],
             mode: 'subscription',
             metadata: {
-                title:"Recipe Product", 
+                title: "Recipe Product",
                 transactionId,
                 userId: userSession?.user.id,
-                amount:99.99,
-                recipeId:'',
-                paymentType:'subscription'
+                amount: 99.99,
+                recipeId: '',
+                paymentType: 'subscription'
             },
             success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
         });

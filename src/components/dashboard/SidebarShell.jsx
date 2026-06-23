@@ -4,7 +4,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Separator, Button } from "@heroui/react";
 import ProfileSummary from "./ProfileSummary";
 import {
@@ -22,6 +22,7 @@ import {
     X,
     StarCheck,
 } from "lucide-react";
+import { authClient } from "@/app/lib/auth-client";
 
 const iconMap = {
     Home,
@@ -48,10 +49,22 @@ export default function SidebarShell({
     brandName = "Recipe Hub",
     brandHref = "/",
 }) {
+    const router=useRouter()
     const pathname = usePathname();
     const [isOpen, setIsOpen] = useState(false);
+    const onLogout = async () => {
+        await authClient.signOut({
+            fetchOptions: {
+                onSuccess: () => {
+                    router.push('/login')
+                    toast.success("Logged Out")
+                },
+            },
+        })
 
+    }
     const SidebarContent = () => (
+
         <>
             <div className="flex items-center justify-between">
                 <Link
@@ -130,7 +143,16 @@ export default function SidebarShell({
                     );
                 })}
             </nav>
-
+            <Separator className="my-5 bg-slate-200 dark:bg-slate-800" />
+            <Button
+                color="danger"
+                variant="solid"
+                size="sm"
+                onPress={() => { onLogout() }}
+                className="mt-4 w-full bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl cursor-pointer transition-colors duration-200"
+            >
+                Sign Out
+            </Button>
             <div className="mt-auto pt-5 text-xs text-slate-500 dark:text-slate-400">
                 {user?.isPremium
                     ? "Premium account"
