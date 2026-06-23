@@ -90,11 +90,12 @@ export default function SidebarShell({
                 </Button>
             </div>
 
+            <Separator className="mt-5 bg-slate-200 dark:bg-slate-800" />
             <div className="mt-4">
                 <ProfileSummary user={user} compact />
             </div>
-
             <Separator className="my-5 bg-slate-200 dark:bg-slate-800" />
+
 
             <nav className="space-y-1">
                 {navItems.map((item) => {
