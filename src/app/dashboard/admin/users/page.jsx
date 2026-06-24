@@ -1,15 +1,35 @@
-"use client";
-
-import { useRouter } from "next/navigation";
+import { auth } from "@/app/lib/auth";
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import { adminNavItems } from "@/components/dashboard/nav-items";
-import { authClient } from "@/app/lib/auth-client";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import UserTableUI from "./UserTableUI";
 
-export default function UserManagePage() {
-    const router = useRouter();
-    const { data: session } = authClient.useSession();
+const PAGE_SIZE = 10;
+
+export default async function UserManagePage({ searchParams }) {
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
+
     const user = session?.user;
 
+    if (!user) {
+        redirect("/login");
+    }
+    const params = await searchParams;
+    const page = Number(params?.page || 1);
+    const offset = (page - 1) * PAGE_SIZE;
+
+    const result = await auth.api.listUsers({
+        query: {
+            limit: PAGE_SIZE,
+            offset,
+            sortBy: "createdAt",
+            sortDirection: "desc",
+        },
+        headers: await headers(),
+    });
 
     return (
         <DashboardShell
@@ -20,7 +40,12 @@ export default function UserManagePage() {
             logoSrc="/RecipeHub Logo.png"
             brandName="RecipeHub"
         >
-
+            <UserTableUI
+                users={result.users}
+                total={result.total}
+                page={page}
+                pageSize={PAGE_SIZE}
+            />
         </DashboardShell>
     );
 }
