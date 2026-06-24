@@ -23,6 +23,7 @@ import {
     StarCheck,
 } from "lucide-react";
 import { authClient } from "@/app/lib/auth-client";
+import toast from "react-hot-toast";
 
 const iconMap = {
     Home,
