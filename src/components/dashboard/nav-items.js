@@ -17,7 +17,7 @@ export const adminNavItems = [
     { label: "Overview", href: "/dashboard/admin", icon: "LayoutDashboard" },
     { label: "Manage Users", href: "/dashboard/admin/users", icon: "Users" },
     { label: "Manage Recipes", href: "/dashboard/admin/recipes", icon: "UtensilsCrossed" },
-    { label: "Recipe Report", href: "/dashboard/admin/reports", icon: "BarChart3" },
+    { label: "Manage Report", href: "/dashboard/admin/reports", icon: "BarChart3" },
     { label: "Transactions", href: "/dashboard/admin/transactions", icon: "CreditCard" },
     { label: "Profile", href: "/dashboard/admin/profile", icon: "UserRound" },
 ];

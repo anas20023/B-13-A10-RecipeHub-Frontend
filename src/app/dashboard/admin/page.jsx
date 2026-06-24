@@ -16,6 +16,9 @@ import {
     StarCheck,
     Crown,
     Users,
+    UtensilsCrossed,
+    CircleAlert,
+    CreditCard,
 } from "lucide-react";
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import { adminNavItems } from "@/components/dashboard/nav-items";
@@ -67,7 +70,7 @@ export default async function UserDashboardPage() {
     const [totalUsers, totalRecipes, ProMembers, totalReports] = await Promise.all([
         db.collection("user").countDocuments(),
         db.collection("recipes").countDocuments(),
-        db.collection("user").countDocuments({isPremium:true}),
+        db.collection("user").countDocuments({ isPremium: true }),
         db.collection("reports").countDocuments(),
     ]);
 
@@ -140,23 +143,23 @@ export default async function UserDashboardPage() {
                 <StatCard
                     title="Total Recipes"
                     value={totalRecipes}
-                    icon={StarCheck}
+                    icon={UtensilsCrossed}
                     hint="Total Recipes uploaded"
-                    gradient="bg-rose-500"
+                    gradient="bg-blue-500"
                 />
                 <StatCard
                     title="Total Premium Members"
                     value={ProMembers}
-                    icon={Heart}
+                    icon={Crown}
                     hint="Total Pro subscriptions"
-                    gradient="bg-red-500"
+                    gradient="bg-orange-500"
                 />
                 <StatCard
                     title="Total Reports"
                     value={totalReports}
-                    icon={ShoppingBag}
+                    icon={CircleAlert}
                     hint="Reports on recipes"
-                    gradient="bg-blue-500"
+                    gradient="bg-red-500"
                 />
             </section>
 
@@ -203,10 +206,10 @@ export default async function UserDashboardPage() {
                         </p>
                         <div className="mt-4 flex flex-col gap-2.5">
                             {[
-                                { href: "/dashboard/user/add-recipe", label: "Add New Recipe", icon: BookOpenText, color: "text-orange-600 bg-orange-50 dark:bg-orange-950/40 dark:text-orange-400" },
-                                { href: "/dashboard/user/favorites", label: "View Favorites", icon: Heart, color: "text-rose-600 bg-rose-50 dark:bg-rose-950/40 dark:text-rose-400" },
-                                { href: "/dashboard/user/purchased-recipes", label: "My Purchases", icon: ShoppingBag, color: "text-blue-600 bg-blue-50 dark:bg-blue-950/40 dark:text-blue-400" },
-                                { href: "/dashboard/user/profile", label: "Update Profile", icon: Star, color: "text-amber-600 bg-amber-50 dark:bg-amber-950/40 dark:text-amber-400" },
+                                { href: "/dashboard/admin/users", label: "Manage Users", icon: Users, color: "text-blue-600 bg-blue-50 dark:bg-blue-950/40 dark:text-blue-400" },
+                                { href: "/dashboard/admin/recipes", label: "Manage Recipes", icon: UtensilsCrossed, color: "text-orange-600 bg-orange-50 dark:bg-orange-950/40 dark:text-orange-400" },
+                                { href: "/dashboard/admin/reports", label: "Recipe Report", icon: CircleAlert, color: "text-red-600 bg-red-50 dark:bg-red-950/40 dark:text-red-400" },
+                                { href: "/dashboard/admin/transactions", label: "Transactions", icon: CreditCard, color: "text-green-600 bg-green-50 dark:bg-green-950/40 dark:text-green-400" },
                             ].map((item) => (
                                 <Link
                                     key={item.href}
