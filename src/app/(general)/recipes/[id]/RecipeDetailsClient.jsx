@@ -113,6 +113,7 @@ export default function RecipeDetailsClient({ recipe }) {
 
     const isFavorited = recipe.favouritedBy?.includes(session?.user?.id)
     const isLiked = recipe.likesCount?.includes(session?.user?.id)
+    const isPurchased=recipe.purchasedBy.includes(session?.user?.id)
 
     return (
         <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
@@ -324,9 +325,11 @@ export default function RecipeDetailsClient({ recipe }) {
 
                                 <Button
                                     type="submit"
+                                    isDisabled={isPurchased}
                                     className="rounded bg-slate-900 px-5 text-white shadow-none
                                                hover:bg-slate-800
-                                               dark:bg-zinc-100 dark:text-slate-950 dark:hover:bg-zinc-200"
+                                               dark:bg-zinc-100 dark:text-slate-950 dark:hover:bg-zinc-200
+                                               disabled:bg-green-400"
                                 >
                                     <div className="flex items-center font-bold gap-1 text-slate-100 dark:text-slate-800">
                                         <IoMdPricetag size={16} />
