@@ -37,6 +37,7 @@ export default async function Success({ searchParams }) {
         userEmail: customer_details?.email,
         userId: metadata?.userId,
         title: metadata?.title,
+        authorName:metadata.authorName,
         amount: metadata?.amount,
         recipeId: metadata?.recipeId || "",
         transactionId: metadata?.transactionId,

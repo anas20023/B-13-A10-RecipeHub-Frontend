@@ -125,12 +125,12 @@ export default async function PurchasedRecipesPage() {
                                                     <p className="font-medium text-slate-900 dark:text-slate-400">
                                                         {purchase.isSubscription
                                                             ? "Premium Subscription"
-                                                            : purchase.recipeName || "Product"}
+                                                            : purchase.title || "Unknown Recipe"}
                                                     </p>
 
                                                     {!purchase.isSubscription && (
                                                         <p className="text-xs text-slate-500">
-                                                            {purchase.authorName || "Email"}
+                                                            {purchase.authorName || "Unknown Author"}
                                                         </p>
                                                     )}
                                                 </div>

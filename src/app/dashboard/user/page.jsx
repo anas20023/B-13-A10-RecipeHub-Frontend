@@ -130,10 +130,10 @@ export default async function UserDashboardPage() {
             iconBg: "bg-orange-100 text-orange-600 dark:bg-orange-950/40 dark:text-orange-400",
         })),
         ...recentPurchases.map((p) => ({
-            text: p.paymentType == 'subscription' ? `Subscribed Pro Plan` : `Purchased "${p.recipeName}"`,
+            text: p.paymentType == 'subscription' ? `Subscribed Pro Plan` : `Purchased "${p.title}"`,
             time: p.paidAt ? new Date(p.paidAt).toLocaleDateString() : "Recently",
             icon: p.paymentType == 'subscription' ? Crown : ShoppingBag,
-            iconBg: "bg-blue-100 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400",
+            iconBg: "bg-blue-100 text-blue-600 dark:b   g-blue-950/40 dark:text-blue-400",
         })),
     ].slice(0, 5);
 

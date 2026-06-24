@@ -316,6 +316,11 @@ export default function RecipeDetailsClient({ recipe }) {
                                     name="recipeId"
                                     value={recipe._id}
                                 />
+                                <input
+                                    type="hidden"
+                                    name="authorName"
+                                    value={recipe.authorName}
+                                />
 
                                 <Button
                                     type="submit"

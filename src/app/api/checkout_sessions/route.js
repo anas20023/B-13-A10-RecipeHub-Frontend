@@ -18,7 +18,9 @@ export async function POST(request) {
         const productPrice = formData.get("productPrice")
         const productTitle = formData.get("productTitle")
         const recipeId = formData.get("recipeId")
+        const authorName = formData.get("authorName")
         const user = userSession?.user;
+        // console.log(authorName)
         if (!user) {
             const params = new URLSearchParams({
                 title: "You must login First",
@@ -51,6 +53,7 @@ export async function POST(request) {
             metadata: {
                 userId: userSession?.user.id,
                 title: productTitle,
+                authorName:authorName,
                 amount: productPrice,
                 recipeId: recipeId || '',
                 transactionId: randomUUID(),
