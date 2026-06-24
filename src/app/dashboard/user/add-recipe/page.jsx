@@ -40,6 +40,7 @@ export default function AddRecipePage() {
         category: "Main Course",
         difficultyLevel: "Medium",
         cuisineType: "International",
+        price: "",
     });
     const [ingredients, setIngredients] = useState([""]);
     const [instructions, setInstructions] = useState([""]);
@@ -205,7 +206,7 @@ export default function AddRecipePage() {
                             />
                         </div>
 
-                        {/* <div className="flex flex-col gap-1.5">
+                        <div className="flex flex-col gap-1.5">
                             <Label htmlFor="price">
                                 <DollarSign className="inline h-3.5 w-3.5 mr-1 align-middle" />
                                 Price (USD) — 0 for free
@@ -220,7 +221,7 @@ export default function AddRecipePage() {
                                 placeholder="0.00"
                                 className="rounded border-2 dark:border-white/25"
                             />
-                        </div> */}
+                        </div>
                     </div>
                 </div>
 

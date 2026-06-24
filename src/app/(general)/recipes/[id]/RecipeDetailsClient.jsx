@@ -9,8 +9,6 @@ import {
     Modal,
     Radio,
     RadioGroup,
-    Separator,
-    useOverlayState,
 } from '@heroui/react'
 import {
     ArrowLeft,
@@ -20,8 +18,6 @@ import {
     Star,
     Clock3,
     Sparkles,
-    AlertCircle,
-    CircleCheck,
 } from 'lucide-react'
 import { IoMdPricetag } from 'react-icons/io'
 import toast from 'react-hot-toast'
@@ -42,7 +38,7 @@ function formatDaysAgo(dateValue) {
 }
 // const { data } = await authClient.token();
 export default function RecipeDetailsClient({ recipe }) {
-    // console.log(recipe)
+    console.log(recipe)
     const [reportReason, setReportReason] = useState('Inaccurate recipe')
     const { data: session } = authClient.useSession()
     // console.log(session)
@@ -114,47 +110,9 @@ export default function RecipeDetailsClient({ recipe }) {
             toast.error(error.message || "Failed to Add to Favourite !")
         }
     }
-    const state = useOverlayState({
-        defaultOpen: false,
-        onOpenChange: (isOpen) => console.log(isOpen),
-    });
-    const handleReportSubmit = async () => {
-        if (!session?.user?.email) {
-            toast.error('Please log in to report recipes');
-            return;
-        }
 
-        const payload = {
-            recipeId: recipe._id,
-            reporterEmail: session.user.email,
-            reporterName: session.user.name,
-            reason: reportReason,
-            status: 'in review',
-        };
-
-        const { data } = await authClient.token();
-        try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/recipes/report`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${data?.token}`,
-                },
-                body: JSON.stringify(payload),
-            });
-
-            const result = await response.json();
-            if (!response.ok) throw new Error(result?.message || 'Failed to submit report');
-            toast.success(result?.message || 'Report submitted successfully');
-            state.close();
-            router.refresh()
-        } catch (error) {
-            toast.error(error.message || 'Failed to submit report');
-        }
-    }
-    const isFavorited = recipe.favouritedBy?.includes(session?.user?.id) || false
-    const isReported = recipe.reportedBy?.includes(session?.user?.id) || false
-    const isLiked = recipe.likesCount?.includes(session?.user?.id) || false
+    const isFavorited = recipe.favouritedBy?.includes(session?.user?.id)
+    const isLiked = recipe.likesCount?.includes(session?.user?.id)
 
     return (
         <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
@@ -316,7 +274,6 @@ export default function RecipeDetailsClient({ recipe }) {
                             <Button
                                 onPress={handleLike}
                                 isDisabled={isLiked}
-                                variant="outline"
                                 className={`rounded-lg px-5 shadow-none transition-colors ${isLiked
                                     ? 'bg-rose-500 text-white hover:bg-rose-600'
                                     : 'bg-zinc-100 text-slate-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-slate-200 dark:hover:bg-zinc-700'
@@ -329,8 +286,7 @@ export default function RecipeDetailsClient({ recipe }) {
                             <Button
                                 onPress={handleFavorite}
                                 isDisabled={isFavorited}
-                                variant="outline"
-                                className={`rounded px-5 shadow-none transition-colors ${isFavorited
+                                className={`rounded-lg px-5 shadow-none transition-colors ${isFavorited
                                     ? 'bg-amber-500 text-white hover:bg-amber-600'
                                     : 'bg-zinc-100 text-slate-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-slate-200 dark:hover:bg-zinc-700'
                                     }`}
@@ -352,33 +308,29 @@ export default function RecipeDetailsClient({ recipe }) {
                                     value={recipe._id}
                                 />
 
-                                <Button
-                                    type="submit"
-                                    className="rounded bg-slate-900 px-5 text-white shadow-none
-                   hover:bg-slate-800
-                   dark:bg-zinc-100 dark:text-slate-950 dark:hover:bg-zinc-200"
-                                >
-                                    <div className="flex items-center gap-1 font-bold text-slate-100 dark:text-slate-800">
-                                        <IoMdPricetag size={16} />
-                                        <span className="text-sm">
-                                            ${recipe.price} USD
-                                        </span>
-                                    </div>
-                                </Button>
-                            </form>
+                            <Button
+                                className="rounded bg-slate-900 px-5 text-white shadow-none
+                                           hover:bg-slate-800
+                                           dark:bg-zinc-100 dark:text-slate-950 dark:hover:bg-zinc-200"
+                            >
+                                <div className="flex items-center font-bold gap-1 text-slate-100 dark:text-slate-800">
+                                    <IoMdPricetag size={16} />
+                                    <span className="text-sm">
+                                        {recipe.price} USD
+                                    </span>
+                                </div>
+                            </Button>
 
-                            <Modal state={state}>
-                                {!isReported && <Button
-                                    onPress={() => state.open()}
-                                    variant="outline"
-                                    aria-label="Report recipe"
-                                    className="rounded bg-zinc-100 px-5 text-slate-700 shadow-none
+                            <Modal>
+                                <Button
+                                    variant="flat"
+                                    className="rounded-lg bg-zinc-100 px-5 text-slate-700 shadow-none
                                                hover:bg-zinc-200
                                                dark:bg-zinc-800 dark:text-slate-200 dark:hover:bg-zinc-700"
                                 >
                                     <Flag size={16} />
                                     <span className="ml-1.5">Report</span>
-                                </Button>}
+                                </Button>
 
                                 <Modal.Backdrop>
                                     <Modal.Container placement="center">
@@ -387,7 +339,7 @@ export default function RecipeDetailsClient({ recipe }) {
                                                                   dark:border-zinc-800 dark:bg-zinc-950">
                                             <Modal.CloseTrigger />
 
-                                            <Modal.Header>
+                                            <Modal.Header className="border-b border-zinc-200 dark:border-zinc-800">
                                                 <Modal.Icon className="bg-zinc-100 text-slate-700
                                                                        dark:bg-zinc-800 dark:text-slate-200">
                                                     <Flag className="size-5" />
@@ -396,78 +348,44 @@ export default function RecipeDetailsClient({ recipe }) {
                                                     Report recipe
                                                 </Modal.Heading>
                                             </Modal.Header>
-                                            <Separator className='my-4' />
+
                                             <Modal.Body className="space-y-4 text-slate-600 dark:text-slate-400">
                                                 <p className="text-sm">
                                                     Choose the reason that best describes the issue with this recipe.
                                                 </p>
 
-                                                <RadioGroup value={reportReason} onChange={setReportReason} name="report-reason" className="flex flex-col gap-2.5" aria-label='report-reason'>
-                                                    <Radio value="Inaccurate recipe" aria-label='Inaccurate recipe'>
-                                                        <Radio.Content>
-                                                            <Radio.Control>
-                                                                <Radio.Indicator>
-                                                                    {({ isSelected }) => isSelected ? <span className="text-xs leading-none text-background"><CircleCheck /></span> : null}
-                                                                </Radio.Indicator>
-                                                            </Radio.Control>
-                                                            Inaccurate recipe
-                                                        </Radio.Content>
-                                                    </Radio>
-
-                                                    <Radio value="Broken or unsafe steps">
-                                                        <Radio.Content>
-                                                            <Radio.Control>
-                                                                <Radio.Indicator>
-                                                                    {({ isSelected }) => isSelected ? <span className="text-xs leading-none text-background"><CircleCheck /></span> : null}
-                                                                </Radio.Indicator>
-                                                            </Radio.Control>
-                                                            Broken or unsafe steps
-                                                        </Radio.Content>
-                                                    </Radio>
-
-                                                    <Radio value="Wrong ingredients">
-                                                        <Radio.Content>
-                                                            <Radio.Control>
-                                                                <Radio.Indicator>
-                                                                    {({ isSelected }) => isSelected ? <span className="text-xs leading-none text-background"><CircleCheck /></span> : null}
-                                                                </Radio.Indicator>
-                                                            </Radio.Control>
-                                                            Wrong ingredients
-                                                        </Radio.Content>
-                                                    </Radio>
-
-                                                    <Radio value="Spam or duplicate">
-                                                        <Radio.Content>
-                                                            <Radio.Control>
-                                                                <Radio.Indicator>
-                                                                    {({ isSelected }) => isSelected ? <span className="text-xs leading-none text-background"><CircleCheck /></span> : null}
-                                                                </Radio.Indicator>
-                                                            </Radio.Control>
-                                                            Spam or duplicate
-                                                        </Radio.Content>
-                                                    </Radio>
+                                                <RadioGroup
+                                                    value={reportReason}
+                                                    onValueChange={setReportReason}
+                                                    className="gap-2.5"
+                                                >
+                                                    <Radio value="Inaccurate recipe">Inaccurate recipe</Radio>
+                                                    <Radio value="Broken or unsafe steps">Broken or unsafe steps</Radio>
+                                                    <Radio value="Wrong ingredients">Wrong ingredients</Radio>
+                                                    <Radio value="Spam or duplicate">Spam or duplicate</Radio>
                                                 </RadioGroup>
                                             </Modal.Body>
-                                            <Separator className='my-4' />
-                                            <Modal.Footer >
+
+                                            <Modal.Footer className="border-t border-zinc-200 dark:border-zinc-800">
                                                 <Button
                                                     slot="close"
                                                     variant="flat"
-                                                    aria-label="Cancel report"
                                                     className="rounded-lg bg-zinc-100 text-slate-700 shadow-none
                                                                hover:bg-zinc-200
                                                                dark:bg-zinc-800 dark:text-slate-200 dark:hover:bg-zinc-700"
                                                 >
                                                     Cancel
                                                 </Button>
-                                                <Button
-                                                    aria-label="Send report"
-                                                    className="rounded-lg bg-orange-500 text-white shadow-none hover:bg-orange-600"
-                                                    onClick={() => handleReportSubmit()}
-                                                >
-                                                    <AlertCircle />  Send Report
-                                                </Button>
 
+                                                <Button
+                                                    slot="close"
+                                                    className="rounded-lg bg-rose-500 text-white shadow-none hover:bg-rose-600"
+                                                    onPress={() => {
+                                                        console.log('Report reason:', reportReason)
+                                                    }}
+                                                >
+                                                    Send Report
+                                                </Button>
                                             </Modal.Footer>
                                         </Modal.Dialog>
                                     </Modal.Container>
