@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useTheme } from "@/context/ThemeContext";
 import { Avatar, Button } from "@heroui/react";
-import { Crown, Moon, Sun } from "lucide-react";
+import { Crown, Moon, Sun, UserCog, UserRound } from "lucide-react";
 
 function getInitials(name = "") {
     return name
@@ -46,8 +46,8 @@ export default function ProfileSummary({
                     </span>
                 )}
 
-                <span>
-                    {user.isPremium && "Premium"} {user.role || "User"}
+                <span className="flex flex-row justify-between items-center gap-2">
+                   {user.role==="admin" ? <UserCog size={18} />:<UserRound size={18} />} {user.isPremium && "Premium"}  {user.role || "User"}
                 </span>
             </div>
 

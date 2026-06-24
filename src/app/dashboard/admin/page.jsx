@@ -15,14 +15,13 @@ import {
     Flame,
     StarCheck,
     Crown,
+    Users,
 } from "lucide-react";
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import { adminNavItems } from "@/components/dashboard/nav-items";
 import Link from "next/link";
 
-function StatCard({ title, value, isPremium = true, icon: Icon, hint, gradient }) {
-    const isMyRecipesNonPremium = title === "My Recipes" && !isPremium;
-    const recipesLeft = Math.max(0, Number(2 - value))
+function StatCard({ title, value, icon: Icon, hint, gradient }) {
     return (
         <div className="rounded relative overflow-hidden border border-slate-200/70 bg-white/90 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
             <div className="absolute inset-0 opacity-5">
@@ -33,18 +32,7 @@ function StatCard({ title, value, isPremium = true, icon: Icon, hint, gradient }
                     <div>
                         <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{title}</p>
                         <h3 className="mt-1.5 text-3xl font-extrabold tracking-tight">{value}</h3>
-                        {isMyRecipesNonPremium ? (
-                            <div className="mt-2 space-y-1.5">
-                                <p className="text-xs font-bold text-red-600 dark:text-red-400">⚠️ You left {recipesLeft} recipes to upload.</p>
-                                <form action="/api/checkout_sessions" method="POST">
-                                    <button type="submit" className="text-xs cursor-pointer font-medium text-orange-600 hover:underline dark:text-orange-400">
-                                        Purchase Subscription →
-                                    </button>
-                                </form>
-                            </div>
-                        ) : (
-                            <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">{hint}</p>
-                        )}
+                        <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">{hint}</p>
                     </div>
                     <div className={`rounded-2xl ${gradient} p-3 text-white shadow-lg`}>
                         <Icon className="h-5 w-5" />
@@ -76,21 +64,11 @@ export default async function UserDashboardPage() {
     // console.log(user)
     const db = await getDb();
 
-    const [myRecipesCount, favoritedCount, likesCount, purchasedCount] = await Promise.all([
-        db.collection("recipes").countDocuments({ authorEmail: user.email }),
-        db.collection("recipes").countDocuments({ favouritedBy: user.id }),
-        db.collection("recipes").aggregate([
-            { $match: { authorId: user.id } },
-            {
-                $project: {
-                    likesCount: {
-                        $cond: [{ $isArray: "$likesCount" }, { $size: "$likesCount" }, 0],
-                    },
-                },
-            },
-            { $group: { _id: null, total: { $sum: "$likesCount" } } },
-        ]).toArray().then((result) => result[0]?.total ?? 0),
-        db.collection("payments").countDocuments({ userEmail: user.email }),
+    const [totalUsers, totalRecipes, ProMembers, totalReports] = await Promise.all([
+        db.collection("user").countDocuments(),
+        db.collection("recipes").countDocuments(),
+        db.collection("user").countDocuments({isPremium:true}),
+        db.collection("reports").countDocuments(),
     ]);
 
     const recentRecipes = await db
@@ -126,7 +104,7 @@ export default async function UserDashboardPage() {
         <DashboardShell
             user={user}
             navItems={adminNavItems}
-            title="Overview"
+            title="Admin Overview"
             description="Track your recipes, favorites, purchases, and profile from one place."
             logoSrc="/RecipeHub Logo.png"
             brandName="RecipeHub"
@@ -153,32 +131,31 @@ export default async function UserDashboardPage() {
             {/* Stat cards */}
             <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <StatCard
-                    title="My Recipes"
-                    value={myRecipesCount}
-                    isPremium={user.isPremium}
-                    icon={BookOpenText}
-                    hint="Recipes you have published"
-                    gradient="bg-orange-500"
+                    title="Total Users"
+                    value={totalUsers}
+                    icon={Users}
+                    hint="Total registered users"
+                    gradient="bg-slate-500"
                 />
                 <StatCard
-                    title="Favorites"
-                    value={favoritedCount}
+                    title="Total Recipes"
+                    value={totalRecipes}
                     icon={StarCheck}
-                    hint="Recipes you saved"
+                    hint="Total Recipes uploaded"
                     gradient="bg-rose-500"
                 />
                 <StatCard
-                    title="Impressions"
-                    value={likesCount}
+                    title="Total Premium Members"
+                    value={ProMembers}
                     icon={Heart}
-                    hint="Impressions you gain"
+                    hint="Total Pro subscriptions"
                     gradient="bg-red-500"
                 />
                 <StatCard
-                    title="Purchased"
-                    value={purchasedCount}
+                    title="Total Reports"
+                    value={totalReports}
                     icon={ShoppingBag}
-                    hint="Premium recipes bought"
+                    hint="Reports on recipes"
                     gradient="bg-blue-500"
                 />
             </section>

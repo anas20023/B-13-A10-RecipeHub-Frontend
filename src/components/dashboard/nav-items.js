@@ -15,8 +15,8 @@ export const userNavItems = [
 export const adminNavItems = [
     // { label: "Home", href: "/", icon: "House" },
     { label: "Overview", href: "/dashboard/admin", icon: "LayoutDashboard" },
-    { label: "Users", href: "/dashboard/admin/users", icon: "Users" },
-    { label: "Recipes", href: "/dashboard/admin/recipes", icon: "UtensilsCrossed" },
+    { label: "Manage Users", href: "/dashboard/admin/users", icon: "Users" },
+    { label: "Manage Recipes", href: "/dashboard/admin/recipes", icon: "UtensilsCrossed" },
     { label: "Recipe Report", href: "/dashboard/admin/reports", icon: "BarChart3" },
     { label: "Transactions", href: "/dashboard/admin/transactions", icon: "CreditCard" },
     { label: "Profile", href: "/dashboard/admin/profile", icon: "UserRound" },

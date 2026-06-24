@@ -17,7 +17,7 @@ async function getRecipes(searchParams) {
 
     params.set('page', page)
 
-    params.set('limit', '10')
+    params.set('limit', '9')
 
     if (search) {
         params.set('recipeName', search)
