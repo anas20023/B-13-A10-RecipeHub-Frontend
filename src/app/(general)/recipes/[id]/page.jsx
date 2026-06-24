@@ -25,5 +25,15 @@ export default async function RecipeDetails({ params }) {
 
   if (!recipe) notFound()
 
-  return <RecipeDetailsClient recipe={recipe} />
+  return <>
+    <div
+      className="
+        fixed inset-0 -z-10 min-h-screen
+        bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,0.12),transparent_30%),radial-gradient(circle_at_top_right,rgba(251,191,36,0.10),transparent_25%),linear-gradient(180deg,#ffffff_0%,#fffaf5_50%,#fff7ed_100%)]
+
+        dark:bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,0.14),transparent_28%),radial-gradient(circle_at_top_right,rgba(251,191,36,0.10),transparent_24%),linear-gradient(180deg,#09090b_0%,#111113_45%,#18181b_100%)]
+        "
+    />
+    <RecipeDetailsClient recipe={recipe} />
+  </>
 }
