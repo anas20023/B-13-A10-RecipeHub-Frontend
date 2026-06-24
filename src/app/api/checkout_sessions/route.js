@@ -9,8 +9,9 @@ export async function POST(request) {
     try {
         const headersList = await headers()
         const origin = headersList.get('origin')
+        // const reqHeaders = await headers();
         const userSession = await auth.api.getSession({
-            headers: request.headers
+            headers: headersList
         })
         const formData = await request.formData();
         // console.log(formData)
