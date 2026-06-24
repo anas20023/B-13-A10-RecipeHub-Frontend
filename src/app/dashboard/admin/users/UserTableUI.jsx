@@ -16,7 +16,15 @@ import {
     User,
     Pencil,
     Trash2,
+    ShieldCogCorner,
+    ShieldCheck,
+    Ban,
+    ShieldCog,
+    Eye,
+    UserRound,
 } from "lucide-react";
+import { authClient } from "@/app/lib/auth-client";
+import toast from "react-hot-toast";
 
 export default function UserTableUI({
     users,
@@ -72,7 +80,35 @@ export default function UserTableUI({
             </div>
         );
     }
-
+    const handleRole = async (id, role) => {
+        const { data, error } = await authClient.admin.updateUser({
+            userId: id, // required
+            data: { role: role === 'admin' ? 'user' : 'admin' }, // required
+        });
+        if (data) {
+            router.refresh()
+            toast.success("Role Changed!")
+        }
+        if (error) {
+            toast.error("Failed to Change Role !")
+        }
+    }
+    const handleBann = async (id, banned) => {
+        if (banned) {
+            await authClient.admin.unbanUser({
+                userId: id, // required
+            });
+            toast.success("User Unbanned !")
+        } else {
+            await authClient.admin.banUser({
+                userId: id, // required
+                banReason: "Spamming",
+                banExpiresIn: 60 * 60 * 24 * 7,
+            });
+            toast.success("User banned !")
+        }
+        router.refresh()
+    }
     return (
         <div className="space-y-5">
             {/* Header */}
@@ -219,21 +255,30 @@ export default function UserTableUI({
                                         {/* ACTIONS */}
                                         <Table.Cell>
                                             <div className="flex items-center gap-2">
+                                                {/* Role Switch */}
                                                 <Button
-                                                    isIconOnly
                                                     size="sm"
-                                                    variant="bordered"
+                                                    variant="outline"
+                                                    onClick={() => handleRole(user.id, user.role)}
                                                 >
-                                                    <Pencil size={16} />
+                                                    {user.role === "admin" ? (
+                                                        <span className="flex items-center gap-1"><UserRound size={16} /> <span className="hidden md:block">Make User</span></span>
+                                                    ) : (
+                                                        <span className="flex items-center gap-1"><ShieldCog size={16} /> <span className="hidden md:block">Make Admin</span></span>
+                                                    )}
                                                 </Button>
 
+                                                {/* Block / Unblock */}
                                                 <Button
-                                                    isIconOnly
                                                     size="sm"
-                                                    color="danger"
-                                                    variant="flat"
+                                                    variant={user.banned ? "outline" : "danger"}
+                                                    onClick={() => handleBann(user.id, user.banned)}
                                                 >
-                                                    <Trash2 size={16} />
+                                                    {user.banned ? (
+                                                        <span className="flex items-center gap-1"><ShieldCheck size={16} /> <span>Unban</span></span>
+                                                    ) : (
+                                                        <span className="flex items-center gap-1"><Ban size={16} /> <span>Ban</span></span>
+                                                    )}
                                                 </Button>
                                             </div>
                                         </Table.Cell>
