@@ -19,5 +19,5 @@ export const adminNavItems = [
     { label: "Recipes", href: "/dashboard/admin/recipes", icon: "UtensilsCrossed" },
     { label: "Recipe Report", href: "/dashboard/admin/reports", icon: "BarChart3" },
     { label: "Transactions", href: "/dashboard/admin/transactions", icon: "CreditCard" },
-    { label: "Profile", href: "/dashboard/admin/profile", icon: "ShieldCheck" },
+    { label: "Profile", href: "/dashboard/admin/profile", icon: "UserRound" },
 ];

@@ -20,7 +20,7 @@ import {
     Settings,
     Menu,
     X,
-    StarCheck,
+    StarCheck,UtensilsCrossed,BarChart3,CreditCard
 } from "lucide-react";
 import { authClient } from "@/app/lib/auth-client";
 import toast from "react-hot-toast";
@@ -36,7 +36,7 @@ const iconMap = {
     ShieldCheck,
     Users,
     Settings,
-    StarCheck
+    StarCheck,UtensilsCrossed,BarChart3,CreditCard
 };
 
 function cn(...classes) {

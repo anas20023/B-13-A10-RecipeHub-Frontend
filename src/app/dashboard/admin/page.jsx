@@ -17,7 +17,7 @@ import {
     Crown,
 } from "lucide-react";
 import DashboardShell from "@/components/dashboard/DashboardShell";
-import { userNavItems } from "@/components/dashboard/nav-items";
+import { adminNavItems } from "@/components/dashboard/nav-items";
 import Link from "next/link";
 
 function StatCard({ title, value, isPremium = true, icon: Icon, hint, gradient }) {
@@ -125,7 +125,7 @@ export default async function UserDashboardPage() {
     return (
         <DashboardShell
             user={user}
-            navItems={userNavItems}
+            navItems={adminNavItems}
             title="Overview"
             description="Track your recipes, favorites, purchases, and profile from one place."
             logoSrc="/RecipeHub Logo.png"
