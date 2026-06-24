@@ -129,7 +129,7 @@ export default function RecipeDetailsClient({ recipe }) {
             reporterEmail: session.user.email,
             reporterName: session.user.name,
             reason: reportReason,
-            status: 'in review',
+            status: 'pending',
         };
 
         const { data } = await authClient.token();
