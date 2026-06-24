@@ -22,7 +22,7 @@ import Link from "next/link";
 
 function StatCard({ title, value, isPremium = true, icon: Icon, hint, gradient }) {
     const isMyRecipesNonPremium = title === "My Recipes" && !isPremium;
-    const recipesLeft = Math.max(0,Number(2-value))
+    const recipesLeft = Math.max(0, Number(2 - value))
     return (
         <div className="rounded relative overflow-hidden border border-slate-200/70 bg-white/90 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
             <div className="absolute inset-0 opacity-5">
@@ -37,8 +37,20 @@ function StatCard({ title, value, isPremium = true, icon: Icon, hint, gradient }
                             <div className="mt-2 space-y-1.5">
                                 <p className="text-xs font-bold text-red-600 dark:text-red-400">⚠️ You left {recipesLeft} recipes to upload.</p>
                                 <form action="/api/checkout_sessions" method="POST">
-                                    <button type="submit" className="text-xs cursor-pointer font-medium text-orange-600 hover:underline dark:text-orange-400">
-                                        Purchase Subscription →
+                                    <input
+                                        type="hidden"
+                                        name="productType"
+                                        value="subscription"
+                                    />
+
+                                    <input
+                                        type="hidden"
+                                        name="productId"
+                                        value="premium-plan"
+                                    />
+
+                                    <button type="submit">
+                                        Purchase Subscription
                                     </button>
                                 </form>
                             </div>
@@ -115,9 +127,9 @@ export default async function UserDashboardPage() {
             iconBg: "bg-orange-100 text-orange-600 dark:bg-orange-950/40 dark:text-orange-400",
         })),
         ...recentPurchases.map((p) => ({
-            text:  p.paymentType=='subscription'? `Subscribed Pro Plan` :`Purchased "${p.recipeName}"`,
+            text: p.paymentType == 'subscription' ? `Subscribed Pro Plan` : `Purchased "${p.recipeName}"`,
             time: p.paidAt ? new Date(p.paidAt).toLocaleDateString() : "Recently",
-            icon: p.paymentType=='subscription'? Crown:ShoppingBag,
+            icon: p.paymentType == 'subscription' ? Crown : ShoppingBag,
             iconBg: "bg-blue-100 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400",
         })),
     ].slice(0, 5);

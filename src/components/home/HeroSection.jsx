@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, Star } from 'lucide-react'
-import { Separator } from '@heroui/react'
+import { Button, Separator } from '@heroui/react'
 
 export default function HeroSection() {
     return (
@@ -70,28 +70,25 @@ export default function HeroSection() {
                                 <ArrowRight size={18} />
                             </Link>
 
-                            <Link
-                                href="/premium"
-                                className="
-                                inline-flex items-center justify-center
-                                rounded-xl
-                                border border-orange-200
-                                bg-white
-                                px-8 py-4
-                                font-semibold
-                                text-zinc-700
-                                transition-all duration-300
-                                hover:border-orange-400 hover:bg-orange-50
+                            <form action="/api/checkout_sessions" method="POST">
+                                <input
+                                    type="hidden"
+                                    name="productType"
+                                    value="subscription"
+                                />
 
-                                dark:border-zinc-800
-                                dark:bg-zinc-900/80
-                                dark:text-zinc-200
-                                dark:hover:border-orange-500/40
-                                dark:hover:bg-zinc-800
-                                "
-                            >
-                                Become Premium
-                            </Link>
+                                <input
+                                    type="hidden"
+                                    name="productId"
+                                    value="premium-plan"
+                                />
+
+                                <button 
+                                    className="inline-flex items-center justify-center gap-2 rounded-xl px-8 py-4 font-semibold text-slate-800 dark:text-slate-400 bg-white dark:bg-zinc-900 border-2 border-slate-200 dark:border-zinc-800 shadow-lg shadow-slate-500/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-slate-300 dark:hover:border-zinc-700"
+                                    type="submit">
+                                    Go Premium
+                                </button>
+                            </form>
                         </div>
 
                         {/* Stats */}

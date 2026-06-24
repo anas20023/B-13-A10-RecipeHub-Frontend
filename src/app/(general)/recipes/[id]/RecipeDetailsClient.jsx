@@ -339,18 +339,33 @@ export default function RecipeDetailsClient({ recipe }) {
                                 <span className="ml-1.5">Favorite</span>
                             </Button>
 
-                            <Button
-                                className="rounded bg-slate-900 px-5 text-white shadow-none
-                                           hover:bg-slate-800
-                                           dark:bg-zinc-100 dark:text-slate-950 dark:hover:bg-zinc-200"
-                            >
-                                <div className="flex items-center font-bold gap-1 text-slate-100 dark:text-slate-800">
-                                    <IoMdPricetag size={16} />
-                                    <span className="text-sm">
-                                        {recipe.price} USD
-                                    </span>
-                                </div>
-                            </Button>
+                            <form action="/api/checkout_sessions" method="POST">
+                                <input
+                                    type="hidden"
+                                    name="productType"
+                                    value="recipe"
+                                />
+
+                                <input
+                                    type="hidden"
+                                    name="productId"
+                                    value={recipe._id}
+                                />
+
+                                <Button
+                                    type="submit"
+                                    className="rounded bg-slate-900 px-5 text-white shadow-none
+                   hover:bg-slate-800
+                   dark:bg-zinc-100 dark:text-slate-950 dark:hover:bg-zinc-200"
+                                >
+                                    <div className="flex items-center gap-1 font-bold text-slate-100 dark:text-slate-800">
+                                        <IoMdPricetag size={16} />
+                                        <span className="text-sm">
+                                            ${recipe.price} USD
+                                        </span>
+                                    </div>
+                                </Button>
+                            </form>
 
                             <Modal state={state}>
                                 {!isReported && <Button

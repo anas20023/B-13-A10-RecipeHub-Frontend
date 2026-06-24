@@ -131,15 +131,21 @@ export default function PricingSection() {
                                 ))}
                             </ul>
 
-                            <form
-                                action="/api/checkout_sessions"
-                                method="POST"
-                                className="mt-10"
-                            >
-                                <Button
-                                    type="submit"
-                                    className="flex h-12 w-full items-center justify-center rounded-2xl bg-orange-500 font-semibold text-white transition-all duration-300 hover:bg-orange-600"
-                                >
+
+                            <form action="/api/checkout_sessions" method="POST" className="mt-8">
+                                <input
+                                    type="hidden"
+                                    name="productType"
+                                    value="subscription"
+                                />
+
+                                <input
+                                    type="hidden"
+                                    name="productId"
+                                    value="premium-plan"
+                                />
+
+                                <Button className={'w-full bg-orange-500 p-6'} type="submit">
                                     Go Premium
                                 </Button>
                             </form>

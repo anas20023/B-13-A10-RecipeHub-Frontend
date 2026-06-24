@@ -43,7 +43,7 @@ export default async function Success({ searchParams }) {
         stripeSessionId: session_id,
         paidAt: new Date().toISOString(),
       };
-
+      // console.log(payload)
       await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/recipes/subscribe`,
         {
