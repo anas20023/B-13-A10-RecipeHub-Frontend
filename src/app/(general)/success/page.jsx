@@ -46,8 +46,12 @@ export default async function Success({ searchParams }) {
         paidAt: new Date().toISOString(),
       };
       // console.log(payload)
+      const incommingHeaders=await headers()
+      const cookie=incommingHeaders.get("cookie") ?? ""
       const tokenReq = await fetch(`${process.env.NEXT_PUBLIC_BETTER_AUTH_URL}/api/auth/token`, {
-        headers: await headers()
+        headers: {
+          cookie
+        }
       })
       const resToken = await tokenReq.json()
       console.log(resToken)
