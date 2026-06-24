@@ -308,18 +308,20 @@ export default function RecipeDetailsClient({ recipe }) {
                                     value={recipe._id}
                                 />
 
-                            <Button
-                                className="rounded bg-slate-900 px-5 text-white shadow-none
-                                           hover:bg-slate-800
-                                           dark:bg-zinc-100 dark:text-slate-950 dark:hover:bg-zinc-200"
-                            >
-                                <div className="flex items-center font-bold gap-1 text-slate-100 dark:text-slate-800">
-                                    <IoMdPricetag size={16} />
-                                    <span className="text-sm">
-                                        {recipe.price} USD
-                                    </span>
-                                </div>
-                            </Button>
+                                <Button
+                                    type="submit"
+                                    className="rounded bg-slate-900 px-5 text-white shadow-none
+                                               hover:bg-slate-800
+                                               dark:bg-zinc-100 dark:text-slate-950 dark:hover:bg-zinc-200"
+                                >
+                                    <div className="flex items-center font-bold gap-1 text-slate-100 dark:text-slate-800">
+                                        <IoMdPricetag size={16} />
+                                        <span className="text-sm">
+                                            {recipe.price} USD
+                                        </span>
+                                    </div>
+                                </Button>
+                            </form>
 
                             <Modal>
                                 <Button
