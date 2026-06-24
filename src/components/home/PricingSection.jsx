@@ -138,13 +138,16 @@ export default function PricingSection() {
                                     name="productType"
                                     value="subscription"
                                 />
-
                                 <input
                                     type="hidden"
-                                    name="productId"
-                                    value="premium-plan"
+                                    name="productPrice"
+                                    value="99.99"
                                 />
-
+                                <input
+                                    type="hidden"
+                                    name="productTitle"
+                                    value="Pro Subscription"
+                                />
                                 <Button className={'w-full bg-orange-500 p-6'} type="submit">
                                     Go Premium
                                 </Button>

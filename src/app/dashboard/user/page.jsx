@@ -42,15 +42,18 @@ function StatCard({ title, value, isPremium = true, icon: Icon, hint, gradient }
                                         name="productType"
                                         value="subscription"
                                     />
-
                                     <input
                                         type="hidden"
-                                        name="productId"
-                                        value="premium-plan"
+                                        name="productPrice"
+                                        value="99.99"
                                     />
-
-                                    <button type="submit">
-                                        Purchase Subscription
+                                    <input
+                                        type="hidden"
+                                        name="productTitle"
+                                        value="Pro Subscription"
+                                    />
+                                    <button type="submit" className="text-xs underline cursor-pointer">
+                                        Purchase Subscription ➡️
                                     </button>
                                 </form>
                             </div>

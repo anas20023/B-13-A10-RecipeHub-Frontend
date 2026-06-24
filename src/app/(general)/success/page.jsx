@@ -2,6 +2,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Card, Button } from "@heroui/react";
 import { stripe } from "@/app/lib/stripe";
+import { headers } from "next/headers";
+import { auth } from "@/app/lib/auth";
 
 export default async function Success({ searchParams }) {
   const { session_id } = await searchParams;
@@ -11,7 +13,6 @@ export default async function Success({ searchParams }) {
       "Please provide a valid session_id (`cs_test_...`)"
     );
   }
-
   const session = await stripe.checkout.sessions.retrieve(
     session_id,
     {
@@ -44,14 +45,18 @@ export default async function Success({ searchParams }) {
         paidAt: new Date().toISOString(),
       };
       // console.log(payload)
+      const tokenReq = await fetch(`${process.env.NEXT_PUBLIC_BETTER_AUTH_URL}/api/auth/token`, {
+        headers: await headers()
+      })
+      const resToken = await tokenReq.json()
+      // console.log(resToken)
       await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/recipes/subscribe`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            // Optional: Add a secret header to secure the endpoint
-            "x-api-key": process.env.SUBSCRIPTION_SECRET,
+            "Authorization": `Bearer ${resToken?.token}`
           },
           body: JSON.stringify(payload),
           cache: "no-store",
