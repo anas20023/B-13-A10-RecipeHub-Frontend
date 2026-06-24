@@ -10,7 +10,7 @@ export async function POST(request) {
         const headersList = await headers()
         const origin = headersList.get('origin')
         const userSession = await auth.api.getSession({
-            headers: await headers()
+            headers: request.headers
         })
         const formData = await request.formData();
         // console.log(formData)
@@ -29,7 +29,7 @@ export async function POST(request) {
             })
             return NextResponse.redirect(`${origin}/subscription-error?${params.toString()}`, 303)
         }
-        if (user.isPremium && productType!=='payment') {
+        if (user.isPremium && productType !== 'payment') {
             const params = new URLSearchParams({
                 title: "Already Subscribed",
                 message: "Your are already a Pro Subscriber.Explore your dashboard.",
@@ -53,7 +53,7 @@ export async function POST(request) {
             metadata: {
                 userId: userSession?.user.id,
                 title: productTitle,
-                authorName:authorName,
+                authorName: authorName,
                 amount: productPrice,
                 recipeId: recipeId || '',
                 transactionId: randomUUID(),
@@ -63,6 +63,7 @@ export async function POST(request) {
         });
         return NextResponse.redirect(session.url, 303)
     } catch (err) {
+        console.log(err)
         return NextResponse.json(
             { error: err.message },
             { status: err.statusCode || 500 }
