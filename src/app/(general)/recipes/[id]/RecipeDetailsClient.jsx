@@ -38,7 +38,7 @@ function formatDaysAgo(dateValue) {
 }
 // const { data } = await authClient.token();
 export default function RecipeDetailsClient({ recipe }) {
-    console.log(recipe)
+    // console.log(recipe)
     const [reportReason, setReportReason] = useState('Inaccurate recipe')
     const { data: session } = authClient.useSession()
     // console.log(session)
@@ -299,12 +299,21 @@ export default function RecipeDetailsClient({ recipe }) {
                                 <input
                                     type="hidden"
                                     name="productType"
-                                    value="recipe"
+                                    value="payment"
                                 />
-
                                 <input
                                     type="hidden"
-                                    name="productId"
+                                    name="productPrice"
+                                    value= {recipe.price}
+                                />
+                                <input
+                                    type="hidden"
+                                    name="productTitle"
+                                    value={recipe.recipeName}
+                                />
+                                <input
+                                    type="hidden"
+                                    name="recipeId"
                                     value={recipe._id}
                                 />
 

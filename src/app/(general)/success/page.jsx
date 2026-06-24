@@ -101,9 +101,8 @@ export default async function Success({ searchParams }) {
               </p>
 
               <div className="mt-6 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 p-4 text-sm text-zinc-600 dark:text-zinc-400">
-                You now have full access to your premium
-                features. You can manage your account and
-                subscription anytime from your dashboard.
+                Your purchase was successful. You can now access your product
+                from the dashboard at any time.
               </div>
 
               <div className="mt-8 flex w-full flex-col justify-center sm:flex-row gap-3">

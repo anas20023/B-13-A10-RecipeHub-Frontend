@@ -12,6 +12,12 @@ export async function POST(request) {
         const userSession = await auth.api.getSession({
             headers: await headers()
         })
+        const formData = await request.formData();
+        // console.log(formData)
+        const productType = formData.get("productType")
+        const productPrice = formData.get("productPrice")
+        const productTitle = formData.get("productTitle")
+        const recipeId = formData.get("recipeId")
         const user = userSession?.user;
         if (!user) {
             const params = new URLSearchParams({
@@ -21,7 +27,7 @@ export async function POST(request) {
             })
             return NextResponse.redirect(`${origin}/subscription-error?${params.toString()}`, 303)
         }
-        if (user.isPremium) {
+        if (user.isPremium && productType!=='payment') {
             const params = new URLSearchParams({
                 title: "Already Subscribed",
                 message: "Your are already a Pro Subscriber.Explore your dashboard.",
@@ -29,12 +35,7 @@ export async function POST(request) {
             })
             return NextResponse.redirect(`${origin}/subscription-error?${params.toString()}`, 303)
         }
-        const formData = await request.formData();
-        // console.log(formData)
-        const productType = formData.get("productType")
-        const productPrice = formData.get("productPrice")
-        const productTitle = formData.get("productTitle")
-        const recipeId = formData.get("recipeId")
+
         // console.log(userSession)
         // Create Checkout Sessions from body params.
         const session = await stripe.checkout.sessions.create({
