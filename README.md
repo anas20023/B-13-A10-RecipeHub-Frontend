@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# RecipeHub Frontend
+
+RecipeHub is a modern recipe-sharing platform built with Next.js App Router. It includes a public marketing site, recipe browsing and details, authentication, user and admin dashboards, Stripe checkout, and recipe management flows.
+
+## Features
+
+- Public landing page with animated sections and smooth scrolling
+- Recipe listing with search, category filtering, pagination, and detail views
+- Auth flows for login and registration
+- User dashboard for managing recipes, favorites, profile, and purchased recipes
+- Admin dashboard for managing users, recipes, reports, and transactions
+- Stripe checkout for premium subscriptions and recipe payments
+- Better Auth session handling with MongoDB storage
+- Toast notifications, loading states, and reusable UI sections
+
+## Tech Stack
+
+- Next.js 16 App Router
+- React 19
+- Tailwind CSS 4
+- HeroUI
+- MongoDB
+- Better Auth
+- Stripe
+- Framer Motion
+- GSAP
+- Lenis
+
+## Package Usage
+
+- `next`: routing, layouts, server components, loading states, image optimization, and route handlers
+- `react` / `react-dom`: UI rendering
+- `@heroui/react` and `@heroui/styles`: buttons, inputs, spinners, cards, router provider, and dashboard UI
+- `better-auth`: authentication, sessions, and social login support
+- `@better-auth/mongo-adapter`: MongoDB adapter for Better Auth
+- `mongodb`: database connection and persistence
+- `stripe` and `@stripe/stripe-js`: checkout and payment flow
+- `framer-motion`: client-side UI transitions and interactions
+- `gsap`: hero animation sequencing
+- `lenis`: smooth page scrolling
+- `lucide-react`, `react-icons`, `@gravity-ui/icons`: icons across the app
+- `react-hot-toast`: toast notifications
+
+## Project Structure
+
+- `src/app`: Next.js routes, layouts, loading states, and API route handlers
+- `src/components/home`: public homepage sections
+- `src/components/dashboard`: dashboard shells and shared nav configuration
+- `src/components/auth`: login and registration forms
+- `src/components/ui`: shared UI helpers like section loading
+- `src/app/lib`: auth, database, Stripe, and server actions
+- `src/context`: app-level providers and theme state
+- `public`: static assets such as logo and hero image
+
+## Environment Variables
+
+Copy `.env.sample` to `.env.local` and fill in your values.
+
+Required variables:
+
+- `MONGO`
+- `GOOGLE_CLIENT_ID`
+- `GOOGLE_CLIENT_SECRET`
+- `NEXT_PUBLIC_BETTER_AUTH_URL`
+- `NEXT_PUBLIC_BACKEND_URL`
+- `STRIPE_SECRET_KEY`
+- `PREMIUM_PRICE_ID`
+- `PRODUCT_PRICE_ID`
+- `NEXT_PUBLIC_IMAGEBB`
 
 ## Getting Started
 
-First, run the development server:
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Create your local environment file:
+
+```bash
+cp .env.sample .env.local
+```
+
+3. Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open the app:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts
 
-## Learn More
+- `npm run dev` - start the development server
+- `npm run build` - create a production build
+- `npm run start` - start the production server
+- `npm run lint` - run ESLint
 
-To learn more about Next.js, take a look at the following resources:
+## Main Routes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `/` - public home page
+- `/recipes` - browse recipes
+- `/recipes/[id]` - recipe details
+- `/login` - login page
+- `/register` - registration page
+- `/dashboard/user` - user dashboard
+- `/dashboard/admin` - admin dashboard
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Notes
 
-## Deploy on Vercel
+- Images are configured to load from remote hosts through `next.config.mjs`.
+- The app uses `@/*` path aliases from `jsconfig.json`.
+- Global loading UI is handled with reusable section loaders so route loading stays local instead of taking over the full screen.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Build Status
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The project builds successfully with `npm run build`.
