@@ -26,6 +26,7 @@ import {
 import { authClient } from "@/app/lib/auth-client";
 import toast from "react-hot-toast";
 import { ok } from "better-auth/api";
+import Link from "next/link";
 
 export default function ReportDetailsUI({
     users,
@@ -139,14 +140,14 @@ export default function ReportDetailsUI({
                 <Table>
                     <Table.ScrollContainer>
                         <Table.Content aria-label="Users Table">
-                            <Table.Header>
+                            <Table.Header >
                                 <Table.Column isRowHeader>
                                     User
                                 </Table.Column>
 
-                                <Table.Column>
+                                {/* <Table.Column>
                                     Email
-                                </Table.Column>
+                                </Table.Column> */}
 
                                 <Table.Column>
                                     Reason
@@ -192,16 +193,16 @@ export default function ReportDetailsUI({
                                                     </p>
 
                                                     <p className="text-xs text-slate-500">
-                                                        {user.reportedBy}
+                                                        {user.reporterEmail}
                                                     </p>
                                                 </div>
                                             </div>
                                         </Table.Cell>
 
-                                        {/* EMAIL VERIFIED */}
+                                        {/* EMAIL VERIFIED
                                         <Table.Cell>
                                             {user.reporterEmail}
-                                        </Table.Cell>
+                                        </Table.Cell> */}
 
                                         {/* ROLE */}
                                         <Table.Cell>
@@ -241,7 +242,13 @@ export default function ReportDetailsUI({
 
                                         {/* ACTIONS */}
                                         <Table.Cell>
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex items-center gap-2 w-full justify-center ">
+                                                <Link href={`/recipes/${user.recipeId}`}>
+                                               <Button variant="outline">
+                                                 <span className="flex items-center gap-1"><Eye size={16} /> <span className="hidden md:block">View</span></span>
+                                               </Button>
+                                        
+                                                </Link>
                                                 {/* Dismiss */}
                                                 <Button
                                                     size="sm"
