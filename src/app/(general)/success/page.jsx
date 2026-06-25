@@ -54,7 +54,7 @@ export default async function Success({ searchParams }) {
         }
       })
       const resToken = await tokenReq.json()
-      console.log(resToken)
+      // console.log(payload)
       await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/recipes/subscribe`,
         {

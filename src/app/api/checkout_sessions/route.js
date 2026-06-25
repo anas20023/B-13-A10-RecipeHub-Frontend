@@ -41,7 +41,7 @@ export async function POST(request) {
 
         // console.log(userSession)
         // Create Checkout Sessions from body params.
-        console.log(productType)
+        // console.log(productType)
         const session = await stripe.checkout.sessions.create({
             line_items: [
                 {

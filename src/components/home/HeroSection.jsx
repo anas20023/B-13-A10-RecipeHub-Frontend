@@ -8,7 +8,7 @@ import { Button, Separator } from '@heroui/react'
 import gsap from 'gsap'
 import { motion } from 'framer-motion'
 
-const MotionLink = motion(Link)
+const MotionLink = motion.create(Link)
 const MotionButton = motion.button
 
 export default function HeroSection() {
@@ -117,17 +117,20 @@ export default function HeroSection() {
                                     name="productType"
                                     value="subscription"
                                 />
-
                                 <input
                                     type="hidden"
-                                    name="productId"
-                                    value="premium-plan"
+                                    name="productPrice"
+                                    value="99.99"
                                 />
-
+                                <input
+                                    type="hidden"
+                                    name="productTitle"
+                                    value="Pro Subscription"
+                                />
                                 <MotionButton
                                     whileHover={{ y: -4, scale: 1.01 }}
                                     whileTap={{ scale: 0.98 }}
-                                    className="inline-flex items-center justify-center gap-2 rounded-xl px-8 py-4 font-semibold text-slate-800 dark:text-slate-400 bg-white dark:bg-zinc-900 border-2 border-slate-200 dark:border-zinc-800 shadow-lg shadow-slate-500/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-slate-300 dark:hover:border-zinc-700"
+                                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl px-8 py-4 font-semibold text-slate-800 dark:text-slate-400 bg-white dark:bg-zinc-900 border-2 border-slate-200 dark:border-zinc-800 shadow-lg shadow-slate-500/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-slate-300 dark:hover:border-zinc-700"
                                     type="submit">
                                     Go Premium
                                 </MotionButton>
