@@ -1,11 +1,50 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, Star } from 'lucide-react'
 import { Button, Separator } from '@heroui/react'
+import gsap from 'gsap'
+import { motion } from 'framer-motion'
+
+const MotionLink = motion(Link)
+const MotionButton = motion.button
 
 export default function HeroSection() {
+    const heroVisualRef = useRef(null)
+    const floatingCardRef = useRef(null)
+
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            gsap.fromTo(
+                heroVisualRef.current,
+                { opacity: 0, y: 28, scale: 0.98 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    duration: 1,
+                    ease: 'power3.out',
+                }
+            )
+
+            gsap.fromTo(
+                floatingCardRef.current,
+                { opacity: 0, y: 24 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    delay: 0.15,
+                    ease: 'power3.out',
+                }
+            )
+        })
+
+        return () => ctx.revert()
+    }, [])
+
     return (
         <section className="relative overflow-hidden">
             {/* Background */}
@@ -53,8 +92,10 @@ export default function HeroSection() {
                         </p>
 
                         <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-                            <Link
+                            <MotionLink
                                 href="/recipes"
+                                whileHover={{ y: -4, scale: 1.01 }}
+                                whileTap={{ scale: 0.98 }}
                                 className="
                                 inline-flex items-center justify-center gap-2
                                 rounded-xl
@@ -68,7 +109,7 @@ export default function HeroSection() {
                             >
                                 Explore Recipes
                                 <ArrowRight size={18} />
-                            </Link>
+                            </MotionLink>
 
                             <form action="/api/checkout_sessions" method="POST">
                                 <input
@@ -83,11 +124,13 @@ export default function HeroSection() {
                                     value="premium-plan"
                                 />
 
-                                <button 
+                                <MotionButton
+                                    whileHover={{ y: -4, scale: 1.01 }}
+                                    whileTap={{ scale: 0.98 }}
                                     className="inline-flex items-center justify-center gap-2 rounded-xl px-8 py-4 font-semibold text-slate-800 dark:text-slate-400 bg-white dark:bg-zinc-900 border-2 border-slate-200 dark:border-zinc-800 shadow-lg shadow-slate-500/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-slate-300 dark:hover:border-zinc-700"
                                     type="submit">
                                     Go Premium
-                                </button>
+                                </MotionButton>
                             </form>
                         </div>
 
@@ -135,6 +178,7 @@ export default function HeroSection() {
                     {/* Hero Image */}
                     <div className="relative">
                         <div
+                            ref={heroVisualRef}
                             className="
                             overflow-hidden rounded-3xl
                             border border-white/60
@@ -161,6 +205,7 @@ export default function HeroSection() {
 
                         {/* Floating Recipe Card */}
                         <div
+                            ref={floatingCardRef}
                             className="
                             absolute bottom-6 left-1/2
                             w-[90%] -translate-x-1/2

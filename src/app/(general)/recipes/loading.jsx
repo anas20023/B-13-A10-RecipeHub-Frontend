@@ -1,9 +1,7 @@
-import { Spinner } from "@heroui/react";
+import SectionLoading from "@/components/ui/SectionLoading";
 
 export default function Loading() {
     return (
-        <div className="flex justify-center items-center min-h-screen">
-            <Spinner size="lg" color="warning" label="Loading..."  />
-        </div>
+        <SectionLoading label="Loading recipes..." className="min-h-[320px]" />
     );
 }

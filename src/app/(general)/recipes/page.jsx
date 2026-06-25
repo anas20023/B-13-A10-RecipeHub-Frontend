@@ -1,4 +1,6 @@
+import { Suspense } from 'react'
 import RecipesView from './RecipesView.jsx'
+import SectionLoading from '@/components/ui/SectionLoading'
 
 function firstValue(value) {
     if (Array.isArray(value)) {
@@ -43,7 +45,7 @@ async function getRecipes(searchParams) {
     return data
 }
 
-export default async function RecipesPage({
+async function RecipesPageContent({
     searchParams,
 }) {
     const resolvedSearchParams =
@@ -68,11 +70,26 @@ export default async function RecipesPage({
             totalPages: 1,
         }
 
+    return <RecipesView
+        recipes={recipes}
+        pagination={pagination}
+        searchParams={resolvedSearchParams}
+    />
+}
+
+export default function RecipesPage({
+    searchParams,
+}) {
     return (
-        <RecipesView
-            recipes={recipes}
-            pagination={pagination}
-            searchParams={resolvedSearchParams}
-        />
+        <Suspense
+            fallback={
+                <SectionLoading
+                    label="Loading recipes..."
+                    className="min-h-[320px]"
+                />
+            }
+        >
+            <RecipesPageContent searchParams={searchParams} />
+        </Suspense>
     )
 }
