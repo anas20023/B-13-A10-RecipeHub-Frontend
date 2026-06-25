@@ -7,8 +7,8 @@ export default function SectionLoading({
     className = '',
 }) {
     return (
-        <div className={`flex items-center justify-center px-6 py-14 ${className}`.trim()}>
-                <Spinner size="lg" color="warning" label={label} />
+        <div className="flex items-center justify-center w-screen h-screen bg-background">
+            <Spinner size="lg" color="warning" label={label} />
         </div>
     )
 }
