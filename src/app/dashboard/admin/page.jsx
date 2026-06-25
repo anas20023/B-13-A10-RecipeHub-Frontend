@@ -164,9 +164,9 @@ export default async function UserDashboardPage() {
             </section>
 
             {/* Activity + Quick Actions */}
-            <section className="mt-6 grid gap-6 xl:grid-cols-3">
+            <section className="mt-6 grid gap-6 xl:grid-cols-1">
                 {/* Recent Activity */}
-                <Card className="xl:col-span-2 border border-slate-200/70 bg-white/90 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+                {/* <Card className="xl:col-span-2 border border-slate-200/70 bg-white/90 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
                     <div className="p-5">
                         <div className="flex items-center justify-between gap-3">
                             <div>
@@ -195,7 +195,7 @@ export default async function UserDashboardPage() {
                             )}
                         </div>
                     </div>
-                </Card>
+                </Card> */}
 
                 {/* Quick Actions */}
                 <Card className="border border-slate-200/70 bg-white/90 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
@@ -204,7 +204,7 @@ export default async function UserDashboardPage() {
                         <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
                             Jump to common tasks.
                         </p>
-                        <div className="mt-4 flex flex-col gap-2.5">
+                        <div className="mt-4 flex flex-col md:flex-row gap-2.5">
                             {[
                                 { href: "/dashboard/admin/users", label: "Manage Users", icon: Users, color: "text-blue-600 bg-blue-50 dark:bg-blue-950/40 dark:text-blue-400" },
                                 { href: "/dashboard/admin/recipes", label: "Manage Recipes", icon: UtensilsCrossed, color: "text-orange-600 bg-orange-50 dark:bg-orange-950/40 dark:text-orange-400" },

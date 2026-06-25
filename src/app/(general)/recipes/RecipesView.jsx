@@ -18,6 +18,7 @@ const categories = [
     'Dessert',
     'Main Course',
     'Snacks',
+    'Drinks'
 ]
 
 export default function RecipesClient({ recipes = [], pagination = {} }) {
