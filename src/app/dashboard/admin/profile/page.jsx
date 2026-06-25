@@ -18,7 +18,7 @@ export default async function UserProfilePage() {
         db.collection("recipes").countDocuments({ authorEmail: user.email }),
         db.collection("recipes").countDocuments({ favouritedBy: user.id }),
         db.collection("recipes").countDocuments({ likesCount: user.id }),
-        db.collection("purchases").countDocuments({ buyerEmail: user.email }),
+        db.collection("payments").countDocuments({ userEmail: user.email }),
     ]);
 
 
@@ -67,9 +67,6 @@ export default async function UserProfilePage() {
                                     </div>
                                 )}
                             </div>
-                            <span className={`mb-1 rounded-full px-3 py-1 text-xs font-semibold ${serializedUser.role === "admin" ? "bg-purple-100 text-purple-700 dark:bg-purple-950/40 dark:text-purple-400" : "bg-orange-100 text-orange-700 dark:bg-orange-950/40 dark:text-orange-400"}`}>
-                                {serializedUser.role}
-                            </span>
                         </div>
 
                         {/* Name / email */}
@@ -80,13 +77,13 @@ export default async function UserProfilePage() {
                             <p className="text-sm text-slate-500 dark:text-slate-400">{user.email}</p>
                             {serializedUser.isPremium && (
                                 <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-950/40 dark:text-amber-400">
-                                    <Crown className="h-3 w-3" /> Premium Member
+                                    <Crown className="h-3 w-3" /> Premium {user.role}
                                 </span>
                             )}
                         </div>
 
                         {/* Stats row */}
-                        <div className="mt-4 grid grid-cols-3 gap-3 border-t border-slate-100 pt-4 dark:border-slate-800">
+                        <div className="mt-4 grid grid-cols-4 gap-3 border-t border-slate-100 pt-4 dark:border-slate-800">
                             {[
                                 { label: "Recipes", value: myRecipesCount, icon: BookOpenText, color: "text-orange-500" },
                                 { label: "Favorites", value: likesCount, icon: StarCheck, color: "text-rose-500" },
