@@ -18,7 +18,7 @@ export default async function UserProfilePage() {
         db.collection("recipes").countDocuments({ authorEmail: user.email }),
         db.collection("recipes").countDocuments({ favouritedBy: user.id }),
         db.collection("recipes").countDocuments({ likesCount: user.id }),
-        db.collection("purchases").countDocuments({ buyerEmail: user.email }),
+        db.collection("payments").countDocuments({ userEmail: user.email }),
     ]);
 
 
@@ -86,14 +86,14 @@ export default async function UserProfilePage() {
                         </div>
 
                         {/* Stats row */}
-                        <div className="mt-4 grid grid-cols-3 gap-3 border-t border-slate-100 pt-4 dark:border-slate-800">
+                        <div className="mt-4 grid grid-cols-4 gap-3 border-t border-slate-100 pt-4 dark:border-slate-800">
                             {[
                                 { label: "Recipes", value: myRecipesCount, icon: BookOpenText, color: "text-orange-500" },
                                 { label: "Favorites", value: likesCount, icon: StarCheck, color: "text-rose-500" },
                                 { label: "Impressions", value: favouritedBy, icon: Heart, color: "text-rose-500" },
                                 { label: "Purchased", value: purchasedCount, icon: ShoppingBag, color: "text-blue-500" },
                             ].map(({ label, value, icon: Icon, color }) => (
-                                <div key={label} className="flex flex-col items-center gap-1 rounded-xl bg-slate-50 py-3 dark:bg-slate-900">
+                                <div key={label} className="flex flex-col items-center gap-1 rounded bg-slate-50 py-3 dark:bg-slate-900">
                                     <Icon className={`h-5 w-5 ${color}`} />
                                     <span className="text-lg font-bold">{value}</span>
                                     <span className="text-xs text-slate-500 dark:text-slate-400">{label}</span>
